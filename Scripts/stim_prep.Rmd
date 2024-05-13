@@ -1,0 +1,34 @@
+---
+title: "Stimuli Preparation"
+author: "Zachary Houghton"
+date: "2024-05-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Preparing Data
+
+```{r}
+original_data = read_csv('../Data/more binomials sentences.csv') 
+
+data = original_data %>%
+  rowwise() %>%
+  mutate(alpha_ordering = grepl(`Binomial (Alphabetical)`, Sentence, ignore.case = T))
+
+data_alpha = data %>% 
+  filter(alpha_ordering == T)
+
+data_nonalpha = data %>%
+  filter(alpha_ordering == F)
+
+
+data_final = data_alpha %>%
+  left_join(data_nonalpha, by = c('Binomial (Alphabetical)', 'Item')) %>%
+  rename('Sentence (alphabetical)' = Sentence.x) %>%
+  rename('Sentence (nonalphabetical)' = Sentence.y) %>%
+  select(-c('alpha_ordering.x', 'alpha_ordering.y'))
+```

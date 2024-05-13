@@ -1,0 +1,433 @@
+Binomial (Alphabetical)	Sentence
+body and mind	"A professional athlete must train both body and mind in order to not only perform well, but also be able to do so under stress. 		"	
+body and mind	"A professional athlete must train both mind and body in order to not only perform well, but also be able to do so under stress. 		"	
+litter and newts	"After a big sale, litter and newts were all that remained of the pet store's inventory."	
+litter and newts	"After a big sale, newts and litter were all that remained of the pet store's inventory."	
+child and mother	"After the birth, both child and mother were asleep in the hospital bed."	
+child and mother	"After the birth, both mother and child were asleep in the hospital bed."	
+safe and sound	"After the storm, Haley was glad to hear that her grandparents were safe and sound in their country home."	
+safe and sound	"After the storm, Haley was glad to hear that her grandparents were sound and safe in their country home."	
+bacteria and candy	All that was left of the girl's Halloween candy was a mess of bacteria and candy after the dog got into her bag.	
+bacteria and candy	All that was left of the girl's Halloween candy was a mess of candy and bacteria after the dog got into her bag.	
+read and write	"Although she had been studying it for a while, she was just beginning to learn to read and write in German.		"	
+read and write	"Although she had been studying it for a while, she was just beginning to learn to write and read in German.		"	
+drink and food	"Although some drink and food were provided at the reception, there was not enough to go around."	
+drink and food	"Although some food and drink were provided at the reception, there was not enough to go around."	
+fauna and flora	"An extensive list of the Amazon's fauna and flora would span thousands of pages.		"	
+fauna and flora	"An extensive list of the Amazon's flora and fauna would span thousands of pages.		"	
+brothers and sisters	"Andrew had always shared his room with his brothers and sisters, so he was excited to have a new roommate in college.		"	
+brothers and sisters	"Andrew had always shared his room with his sisters and brothers, so he was excited to have a new roommate in college.		"	
+gelatin and lard	"As a vegetarian, gelatin and lard are difficult to avoid."	
+gelatin and lard	"As a vegetarian, lard and gelatin are difficult to avoid."	
+hesitate and readjust	"As Joe carried a tall stack of boxes, he had to hesitate and readjust before he could go further."	
+hesitate and readjust	"As Joe carried a tall stack of boxes, he had to readjust and hesitate before he could go further."	
+chanting and enchanting	"At the wizard school, chanting and enchanting were very common occurrences."	
+chanting and enchanting	"At the wizard school, enchanting and chanting were very common occurrences."	
+horses and loons	At the zoo we saw horses and loons in their natural habitats.	
+horses and loons	At the zoo we saw loons and horses in their natural habitats.	
+allergic and unaccustomed	"Because Jim was allergic and unaccustomed to elderberries, he was careful to avoid them."	
+allergic and unaccustomed	"Because Jim was unaccustomed and allergic to elderberries, he was careful to avoid them."	
+rats and sharks	Billy drew almost nothing but rats and sharks day after day in elementary school art class.	
+rats and sharks	Billy drew almost nothing but sharks and rats day after day in elementary school art class.	
+pain and suffering	Blake dislikes seeing all the pain and suffering in the world when he watches the news.	
+pain and suffering	Blake dislikes seeing all the suffering and pain in the world when he watches the news.	
+church and state	"Both the church and state agreed on the education reforms.		"	
+church and state	"Both the state and church agreed on the education reforms.		"	
+past and present	By comparing the past and present we can learn about universal human tendencies.	
+past and present	By comparing the present and past we can learn about universal human tendencies.	
+buy and sell	Caleb likes to buy and sell electronics on eBay as a hobby.	
+buy and sell	Caleb likes to sell and buy electronics on eBay as a hobby.	
+church and state	Catherine was not surprised that tensions between church and state ran high during the election season.	
+church and state	Catherine was not surprised that tensions between state and church ran high during the election season.	
+child and mother	Clarissa found the painting of a child and mother to be very moving.	
+child and mother	Clarissa found the painting of a mother and child to be very moving.	
+hesitate and readjust	Comments from his coach caused the student to hesitate and readjust before making the throw.	
+hesitate and readjust	Comments from his coach caused the student to readjust and hesitate before making the throw.	
+buy and sell	"Consignment stores are a great way to both buy and sell old things.		"	
+buy and sell	"Consignment stores are a great way to both sell and buy old things.		"	
+horses and loons	Danny looked happily out the window at the horses and loons roaming the countryside.	
+horses and loons	Danny looked happily out the window at the loons and horses roaming the countryside.	
+gold and silver	Dave gave his wife a beautiful gold and silver bracelet for her birthday.	
+gold and silver	Dave gave his wife a beautiful silver and gold bracelet for her birthday.	
+bicycles and robots	Dave was always building bicycles and robots when he was younger.	
+bicycles and robots	Dave was always building robots and bicycles when he was younger.	
+currant and pomegranate	"Dave was an unusual child, as his favorite fruits were currant and pomegranate."	
+currant and pomegranate	"Dave was an unusual child, as his favorite fruits were pomegranate and currant."	
+sour and sweet	David's favorite food was sour and sweet chicken because he liked the sauce.	
+sour and sweet	David's favorite food was sweet and sour chicken because he liked the sauce.	
+alive and well	Deborah's grandmother was alive and well despite having a heart attack at 78 years old.	
+alive and well	Deborah's grandmother was well and alive despite having a heart attack at 78 years old.	
+east and west	Diane wrote a book about her travels east and west around the globe for a year.	
+east and west	Diane wrote a book about her travels west and east around the globe for a year.	
+development and research	"Emily spent a few years in development and research but eventually decided to go back to academia.		"	
+development and research	"Emily spent a few years in research and development but eventually decided to go back to academia.		"	
+cherries and llamas	"Even with all the other attractions, the cherries and llamas were my favorite parts of the farm visit."	
+cherries and llamas	"Even with all the other attractions, the llamas and cherries were my favorite parts of the farm visit."	
+safe and sound	"Every night the baby lay safe and sound in her crib.		"	
+safe and sound	"Every night the baby lay sound and safe in her crib.		"	
+king and queen	Everyone bowed as the king and queen entered the throne room.	
+king and queen	Everyone bowed as the queen and king entered the throne room.	
+heart and soul	Excercising regularly is important for your heart and soul according to my mother.	
+heart and soul	Excercising regularly is important for your soul and heart according to my mother.	
+error and trial	"Hal solved the math problem by error and trial because he couldn't remember the shortcut.		"	
+error and trial	"Hal solved the math problem by trial and error because he couldn't remember the shortcut.		"	
+pain and suffering	Harold was prescribed medication to ease the pain and suffering associated with his condition.	
+pain and suffering	Harold was prescribed medication to ease the suffering and pain associated with his condition.	
+first and ninety-eighth	"He had a multitude of ideas, though all but the first and ninety-eighth were terrible."	
+first and ninety-eighth	"He had a multitude of ideas, though all but the ninety-eighth and first were terrible."	
+abashed and sorry	He was abashed and sorry about his horrible behavior.	
+ducks and peanuts	"He was excited to go look at ducks and peanuts all day.		"	
+ducks and peanuts	"He was excited to go look at peanuts and ducks all day.		"	
+abashed and sorry	He was sorry and abashed about his horrible behavior.	
+coroners and senators	He wondered why there were so many coroners and senators at the scientific conference.	
+coroners and senators	He wondered why there were so many senators and coroners at the scientific conference.	
+crime and punishment	He wrote a paper about the different views of crime and punishment around the world.	
+crime and punishment	He wrote a paper about the different views of punishment and crime around the world.	
+happily and rudely	His mother didn't hear when Nate happily and rudely told his sister to shut up.	
+happily and rudely	His mother didn't hear when Nate rudely and happily told his sister to shut up.	
+coroners and senators	"His uncles were all coroners and senators in their day jobs, but they all wanted to get into the movie industry."	
+coroners and senators	"His uncles were all senators and coroners in their day jobs, but they all wanted to get into the movie industry."	
+right and wrong	Historians can attest to the fact that right and wrong have often been determined by the victor in a conflict.	
+right and wrong	Historians can attest to the fact that wrong and right have often been determined by the victor in a conflict.	
+brothers and sisters	I always love seeing my brothers and sisters when I go home for the holidays.	
+brothers and sisters	I always love seeing my sisters and brothers when I go home for the holidays.	
+intents and purposes	I could not guess the intents and purposes of the confusing new regulations.	
+intents and purposes	I could not guess the purposes and intents of the confusing new regulations.	
+sour and sweet	I found that the sour and sweet pork was much better at this new restaurant than at my favorite one.	
+sour and sweet	I found that the sweet and sour pork was much better at this new restaurant than at my favorite one.	
+pain and suffering	I hate to see the pain and suffering my mom goes through after chemo treatments.	
+pain and suffering	I hate to see the suffering and pain my mom goes through after chemo treatments.	
+heart and soul	I invested my heart and soul in the charity that my father founded.	
+heart and soul	I invested my soul and heart in the charity that my father founded.	
+buy and sell	I like to go to the local swap meet to buy and sell old records.	
+buy and sell	I like to go to the local swap meet to sell and buy old records.	
+match and mix	I like to match and mix my clothing to create new outfits.	
+match and mix	I like to mix and match my clothing to create new outfits.	
+match and mix	"I like when a store has match and mix sales, so I don't have to buy two of the same thing to get a discount."	
+match and mix	"I like when a store has mix and match sales, so I don't have to buy two of the same thing to get a discount."	
+determined and forgettable	I talked with my boss about whether to hire the determined and forgettable job candidate that we interviewed.	
+determined and forgettable	I talked with my boss about whether to hire the forgettable and determined job candidate that we interviewed.	
+vocabulary and vowels	I want to improve my vocabulary and vowels so I can do well on standardized tests.	
+vocabulary and vowels	I want to improve my vowels and vocabulary so I can do well on standardized tests.	
+bitter and purple	I was unwilling to drink the juice that was bitter and purple despite my personal trainer's insistences.	
+bitter and purple	I was unwilling to drink the juice that was purple and bitter despite my personal trainer's insistences.	
+past and present	"In both her past and present she experienced many setbacks in her career.		"	
+past and present	"In both her present and past she experienced many setbacks in her career.		"	
+right and wrong	"In many cases, what is right and wrong is subjective opinion.		"	
+right and wrong	"In many cases, what is wrong and right is subjective opinion.		"	
+puppies and tigers	"In my dream, I had puppies and tigers that I kept as pets."	
+puppies and tigers	"In my dream, I had tigers and puppies that I kept as pets."	
+flowers and zinnias	"In the spring, Julie will plant flowers and zinnias in her new garden."	
+flowers and zinnias	"In the spring, Julie will plant zinnias and flowers in her new garden."	
+vocabulary and vowels	Irena had trouble with vocabulary and vowels while she was learning English.	
+vocabulary and vowels	Irena had trouble with vowels and vocabulary while she was learning English.	
+past and present	"It is important to examine both the past and present when trying to determine what the future holds.		"	
+past and present	"It is important to examine both the present and past when trying to determine what the future holds.		"	
+fauna and flora	It is important to study both the fauna and flora in a region in order to fully understand the ecosystem.	
+fauna and flora	It is important to study both the flora and fauna in a region in order to fully understand the ecosystem.	
+allergic and unaccustomed	"It was unfortunate that Jeffrey was allergic and unaccustomed to the weather in the city, as he had been looking forward to the trip."	
+allergic and unaccustomed	"It was unfortunate that Jeffrey was unaccustomed and allergic to the weather in the city, as he had been looking forward to the trip."	
+allergic and unaccustomed	Jack guessed that he must be allergic and unaccustomed to something in this new climate and resolved never to travel again.	
+allergic and unaccustomed	Jack guessed that he must be unaccustomed and allergic to something in this new climate and resolved never to travel again.	
+blankets and kittens	Jean likes snuggling with her blankets and kittens while she reads a book.	
+blankets and kittens	Jean likes snuggling with her kittens and blankets while she reads a book.	
+men and women	Jen thought that the men and women in her dance class were all very talented.	
+men and women	Jen thought that the women and men in her dance class were all very talented.	
+rats and sharks	Jenny was interested in rats and sharks as a young child.	
+rats and sharks	Jenny was interested in sharks and rats as a young child.	
+arts and sciences	"Jessica couldn't decide between studying arts and sciences in college, so she studied both."	
+arts and sciences	"Jessica couldn't decide between studying sciences and arts in college, so she studied both."	
+happily and rudely	Joe hated his boss since he was always happily and rudely telling people off.	
+happily and rudely	Joe hated his boss since he was always rudely and happily telling people off.	
+bride and groom	John showed me pictures of the bride and groom both dressed in blue.	
+bride and groom	John showed me pictures of the groom and bride both dressed in blue.	
+arts and sciences	Joseph had a keen interest in both the arts and sciences developed in ancient Rome.	
+arts and sciences	Joseph had a keen interest in both the sciences and arts developed in ancient Rome.	
+discontent and tearfulness	Julie suffered from discontent and tearfulness after hearing that she was laid off from her job.	
+discontent and tearfulness	Julie suffered from tearfulness and discontent after hearing that she was laid off from her job.	
+abashed and sorry	"Kate had not studied much for the test, and was abashed and sorry about her performance."	
+abashed and sorry	"Kate had not studied much for the test, and was sorry and abashed about her performance."	
+therapy and vacations	"Katherine's boss did not want her to take time off for therapy and vacations, even though it would improve her health."	
+therapy and vacations	"Katherine's boss did not want her to take time off for vacations and therapy, even though it would improve her health."	
+hesitate and readjust	Katie's mom warned her to hesitate and readjust so she wouldn't fall down when she ran excitedly to the playground.	
+hesitate and readjust	Katie's mom warned her to readjust and hesitate so she wouldn't fall down when she ran excitedly to the playground.	
+gold and silver	Keith marveled at the gold and silver decorations on the walls of the palace.	
+gold and silver	Keith marveled at the silver and gold decorations on the walls of the palace.	
+groundskeeper and superintendent	Laura had to interview many people for the groundskeeper and superintendent positions before she found good candidates.	
+groundskeeper and superintendent	Laura had to interview many people for the superintendent and groundskeeper positions before she found good candidates.	
+groundskeeper and superintendent	Laura heard that the school's groundskeeper and superintendent got married over the summer.	
+groundskeeper and superintendent	Laura heard that the school's superintendent and groundskeeper got married over the summer.	
+food and drink	"Lea had not had food and drink all day, so she was excited to go out to dinner.		"	
+bacteria and candy	Leah reached into the bowl of bacteria and candy as she sat in the doctor's office waiting room.	
+bacteria and candy	Leah reached into the bowl of candy and bacteria as she sat in the doctor's office waiting room.	
+loss and profit	Learning to forecast loss and profit was a topic in Brian's business skills class.	
+loss and profit	Learning to forecast profit and loss was a topic in Brian's business skills class.	
+body and mind	Learning to strengthen your body and mind is one of main purposes of doing yoga.	
+body and mind	Learning to strengthen your mind and body is one of main purposes of doing yoga.	
+east and west	"Lena had lived in the east and west and loved both.		"	
+east and west	"Lena had lived in the west and east and loved both.		"	
+fork and knife	Many children find eating with a fork and knife to be a difficult skill to learn.	
+fork and knife	Many children find eating with a knife and fork to be a difficult skill to learn.	
+drink and food	Many students were dismayed after drink and food were banned from classrooms.	
+drink and food	Many students were dismayed after food and drink were banned from classrooms.	
+development and research	Many years of development and research went into the company's new product.	
+development and research	Many years of research and development went into the company's new product.	
+therapy and vacations	Maria could use therapy and vacations to feel less stressed.	
+therapy and vacations	Maria could use vacations and therapy to feel less stressed.	
+development and research	Mark finds working on development and research for the marketing company to be a very satisfying career.	
+development and research	Mark finds working on research and development for the marketing company to be a very satisfying career.	
+address and name	"Mary needed the landlord's address and name before she could send her first rent check.		"	
+address and name	"Mary needed the landlord's name and address before she could send her first rent check.		"	
+husband and wife	Michelle was surprised to learn that the husband and wife were getting a divorce.	
+husband and wife	Michelle was surprised to learn that the wife and husband were getting a divorce.	
+arts and sciences	Most universities have programs in the arts and sciences in addition to having various professional schools.	
+arts and sciences	Most universities have programs in the sciences and arts in addition to having various professional schools.	
+safe and sound	My aunt was relieved to find her wedding dress still safe and sound after a burglar robbed her house.	
+safe and sound	My aunt was relieved to find her wedding dress still sound and safe after a burglar robbed her house.	
+talking and singing	My cousin's new talking and singing toy is annoying and teal according to my aunt.	
+talking and singing	My cousin's new talking and singing toy is teal and annoying according to my aunt.	
+lankier and lanky	My cousins were all lankier and lanky but were surprisingly strong.	
+lankier and lanky	My cousins were all lanky and lankier but were surprisingly strong.	
+felines and quails	My favorite animals have been felines and quails ever since I was a kid.	
+felines and quails	My favorite animals have been quails and felines ever since I was a kid.	
+gelatin and lard	"My friend complained that the dessert tasted like gelatin and lard in a bowl, but ate it all anyway."	
+gelatin and lard	"My friend complained that the dessert tasted like lard and gelatin in a bowl, but ate it all anyway."	
+nurses and patriarchs	My grandparents were all nurses and patriarchs when they were alive.	
+nurses and patriarchs	My grandparents were all patriarchs and nurses when they were alive.	
+fork and knife	"Not all cultures use a fork and knife as their main utensils.		"	
+fork and knife	"Not all cultures use a knife and fork as their main utensils.		"	
+magazines and newspapers	Paul primarily got his news through magazines and newspapers rather than through television.	
+magazines and newspapers	Paul primarily got his news through newspapers and magazines rather than through television.	
+masculine and undignified	Peter met a man who was masculine and undignified at the conference he went to last month.	
+masculine and undignified	Peter met a man who was undignified and masculine at the conference he went to last month.	
+crime and punishment	Peter studied the laws concerning crime and punishment in Ancient Greece and Rome.	
+crime and punishment	Peter studied the laws concerning punishment and crime in Ancient Greece and Rome.	
+crime and punishment	Peter was ashamed of the crime and punishment laws in his state.	
+crime and punishment	Peter was ashamed of the punishment and crime laws in his state.	
+heart and soul	Richard put his heart and soul into teaching middle schoolers. 	
+heart and soul	Richard put his soul and heart into teaching middle schoolers. 	
+flowers and zinnias	Sarah loved looking at the flowers and zinnias in the park.	
+flowers and zinnias	Sarah loved looking at the zinnias and flowers in the park.	
+alive and well	Sarah was relieved to find that her friends were alive and well after the car crash.	
+alive and well	Sarah was relieved to find that her friends were well and alive after the car crash.	
+radio and television	Seth follows both radio and television broadcasts to stay informed about current events.	
+radio and television	Seth follows both television and radio broadcasts to stay informed about current events.	
+blankets and kittens	Seth told me that there are blankets and kittens in that box over there.	
+blankets and kittens	Seth told me that there are kittens and blankets in that box over there.	
+body and mind	"Seth wanted to relax both his body and mind before taking the final.		"	
+body and mind	"Seth wanted to relax both his mind and body before taking the final.		"	
+ducks and peanuts	"She couldn't believe how many ducks and peanuts were at the pond.		"	
+ducks and peanuts	"She couldn't believe how many peanuts and ducks were at the pond.		"	
+fauna and flora	"She had a hobby of studying fauna and flora in her spare time.		"	
+fauna and flora	"She had a hobby of studying flora and fauna in her spare time.		"	
+masculine and undignified	She regretted going on a date with the masculine and undignified man she met at the bar.	
+masculine and undignified	She regretted going on a date with the undignified and masculine man she met at the bar.	
+puppies and tigers	"She wondered if puppies and tigers would get along, but had no way of testing the question."	
+puppies and tigers	"She wondered if tigers and puppies would get along, but had no way of testing the question."	
+actresses and lumberjacks	Sheila had become accustomed to seeing actresses and lumberjacks around town.	
+actresses and lumberjacks	Sheila had become accustomed to seeing lumberjacks and actresses around town.	
+alive and well	Shima was finally feeling alive and well again after being sick for the past week.	
+alive and well	Shima was finally feeling well and alive again after being sick for the past week.	
+annoying and teal	"Since moving into the new house, the man has been plagued by an annoying and teal bird that causes a racket in the mornings."	
+annoying and teal	"Since moving into the new house, the man has been plagued by an teal and annoying bird that causes a racket in the mornings."	
+backwards and forwards	Soccer players practice running both backwards and forwards in order to stay nimble.	
+backwards and forwards	Soccer players practice running both forwards and backwards in order to stay nimble.	
+gold and silver	"Society has moved past directly using gold and silver as currency.		"	
+gold and silver	"Society has moved past directly using silver and gold as currency.		"	
+read and write	Some children enjoy learning to read and write but others dislike it.	
+read and write	Some children enjoy learning to write and read but others dislike it.	
+error and trial	Sometimes it feels like error and trial is the only way to learn.	
+error and trial	Sometimes it feels like trial and error is the only way to learn.	
+sour and sweet	Susan disliked the sour and sweet soup at the fancy restaurant.	
+sour and sweet	Susan disliked the sweet and sour soup at the fancy restaurant.	
+radio and television	"Susie didn't like to read, so radio and television were her favorite forms of entertainment.		"	
+radio and television	"Susie didn't like to read, so television and radio were her favorite forms of entertainment.		"	
+right and wrong	Teaching children what is right and wrong is a difficult task for parents.	
+right and wrong	Teaching children what is wrong and right is a difficult task for parents.	
+rats and sharks	"Teresa loved rats and sharks, and wanted to be a biologist when she grew up."	
+rats and sharks	"Teresa loved sharks and rats, and wanted to be a biologist when she grew up."	
+read and write	"The ability to read and write is an important factor in determining a person's success.		"	
+read and write	"The ability to write and read is an important factor in determining a person's success.		"	
+radio and television	"The advent of radio and television marked the beginning of the decline of newspapers.		"	
+radio and television	"The advent of television and radio marked the beginning of the decline of newspapers.		"	
+peace and war	The anthropologist studied the way different cultures conceived of peace and war during the Middle Ages.	
+peace and war	The anthropologist studied the way different cultures conceived of war and peace during the Middle Ages.	
+chanting and enchanting	The apprentice left the wizard to do his chanting and enchanting in peace.	
+chanting and enchanting	The apprentice left the wizard to do his enchanting and chanting in peace.	
+discontent and tearfulness	The athlete managed to keep training through the discontent and tearfulness of his early years.	
+discontent and tearfulness	The athlete managed to keep training through the tearfulness and discontent of his early years.	
+bitter and purple	The berries were bitter and purple when I ate them this morning.	
+bitter and purple	The berries were purple and bitter when I ate them this morning.	
+bicycles and robots	The boy put bicycles and robots on his Christmas list this year.	
+bicycles and robots	The boy put robots and bicycles on his Christmas list this year.	
+lankier and lanky	"The boys in the video game club were lankier and lanky, since they were accustomed to sitting for long periods of time."	
+lankier and lanky	"The boys in the video game club were lanky and lankier, since they were accustomed to sitting for long periods of time."	
+shares and stocks	The broker bought some risky shares and stocks without knowing it and only discovered it later.	
+shares and stocks	The broker bought some risky stocks and shares without knowing it and only discovered it later.	
+nurses and patriarchs	The building was full of nurses and patriarchs talking loudly about their plans.	
+nurses and patriarchs	The building was full of patriarchs and nurses talking loudly about their plans.	
+currant and pomegranate	The chef decided to try some dishes using currant and pomegranate to add variety to the menu.	
+currant and pomegranate	The chef decided to try some dishes using pomegranate and currant to add variety to the menu.	
+happily and rudely	The child happily and rudely asked the woman when she was having a baby.	
+happily and rudely	The child rudely and happily asked the woman when she was having a baby.	
+address and name	The clerk asked for Melissa's address and name in order to complete the form.	
+address and name	The clerk asked for Melissa's name and address in order to complete the form.	
+puppies and tigers	The coloring book had lots of pictures of puppies and tigers in it.	
+puppies and tigers	The coloring book had lots of pictures of tigers and puppies in it.	
+shares and stocks	"The couple decided to buy some shares and stocks as an investment for the future. 	N	Was the couple looking for immediate returns?"	
+shares and stocks	The couple decided to buy some stocks and shares as an investment for the future. 	
+shares and stocks	"The couple decided to buy some stocks and shares as an investment for the future. 	N	Was the couple looking for immediate returns?"	
+first and ninety-eighth	"The couple got separated during their Black Friday shopping, and ended up being the first and ninety-eighth people in line."	
+first and ninety-eighth	"The couple got separated during their Black Friday shopping, and ended up being the ninety-eighth and first people in line."	
+husband and wife	"The couple was too young to be husband and wife, in their parents' opinion.		"	
+husband and wife	"The couple was too young to be wife and husband, in their parents' opinion.		"	
+marooned and missing	The crew was declared marooned and missing after a sudden storm ended with their ship stuck on a reef.	
+marooned and missing	The crew was declared missing and marooned after a sudden storm ended with their ship stuck on a reef.	
+determined and forgettable	The deeds of the determined and forgettable adventurer went largely uncelebrated.	
+determined and forgettable	The deeds of the forgettable and determined adventurer went largely uncelebrated.	
+bacteria and candy	The dentist told Sally that bacteria and candy would rot her teeth.	
+bacteria and candy	The dentist told Sally that candy and bacteria would rot her teeth.	
+men and women	"The disparity between the wages of men and women in the workforce is a major concern for many.		"	
+men and women	"The disparity between the wages of women and men in the workforce is a major concern for many.		"	
+discontent and tearfulness	The doctor said that discontent and tearfulness are signs of depression.	
+discontent and tearfulness	The doctor said that tearfulness and discontent are signs of depression.	
+beautiful and stinky	The doll was beautiful and stinky after Jenny pulled it out of the trash.	
+beautiful and stinky	The doll was stinky and beautiful after Jenny pulled it out of the trash.	
+currant and pomegranate	The drink flavored with currant and pomegranate was delicious according to Kim.	
+currant and pomegranate	The drink flavored with pomegranate and currant was delicious according to Kim.	
+backwards and forwards	"The driver had to move backwards and forwards many times to get the large truck into the parking spot properly.		"	
+backwards and forwards	"The driver had to move forwards and backwards many times to get the large truck into the parking spot properly.		"	
+masculine and undignified	The duchess was interested in the masculine and undignified suitor for a very long time before she met the prince.	
+masculine and undignified	The duchess was interested in the undignified and masculine suitor for a very long time before she met the prince.	
+demand and supply	The economist became famous for studying the way demand and supply affect the steel industry.	
+demand and supply	The economist became famous for studying the way supply and demand affect the steel industry.	
+husband and wife	The elderly couple decided to renew their vows as husband and wife for their fiftieth anniversary.	
+husband and wife	The elderly couple decided to renew their vows as wife and husband for their fiftieth anniversary.	
+beautiful and stinky	The elephants at the zoo were beautiful and stinky so the children loved them.	
+beautiful and stinky	The elephants at the zoo were stinky and beautiful so the children loved them.	
+bicycles and robots	The engineer specialized in making bicycles and robots when he worked for the company.	
+bicycles and robots	The engineer specialized in making robots and bicycles when he worked for the company.	
+loss and profit	"The entrepeneur had a tumultuous career, but handled both loss and profit well enough to secure a comfortable retirement."	
+loss and profit	"The entrepeneur had a tumultuous career, but handled both profit and loss well enough to secure a comfortable retirement."	
+king and queen	The festival held for the coronation of the king and queen was thoroughly enjoyed by all.	
+king and queen	The festival held for the coronation of the queen and king was thoroughly enjoyed by all.	
+first and ninety-eighth	The finalists in the tennis championship were ranked first and ninety-eighth in the world prior to the tournament.	
+first and ninety-eighth	The finalists in the tennis championship were ranked ninety-eighth and first in the world prior to the tournament.	
+bitter and purple	The fruit looked delicious but it turned out to be bitter and purple after I took a bite.	
+bitter and purple	The fruit looked delicious but it turned out to be purple and bitter after I took a bite.	
+match and mix	The furniture store's match and mix sale made it much easier to furnish multiple rooms. 	
+match and mix	The furniture store's mix and match sale made it much easier to furnish multiple rooms. 	
+beautiful and stinky	The gardener was dismayed to learn that he had planted some flowers that were both beautiful and stinky alongside the rest of his plants.	
+beautiful and stinky	The gardener was dismayed to learn that he had planted some flowers that were both stinky and beautiful alongside the rest of his plants.	
+peace and war	"The group of friends liked to discuss peace and war in their philosophy club.		"	
+peace and war	"The group of friends liked to discuss war and peace in their philosophy club.		"	
+chauffeurs and stewardesses	The growth of the travel industry led to many openings for chauffeurs and stewardesses in the area.	
+chauffeurs and stewardesses	The growth of the travel industry led to many openings for stewardesses and chauffeurs in the area.	
+nurses and patriarchs	The hotel lobby was full of nurses and patriarchs eager for the start of the conference.	
+nurses and patriarchs	The hotel lobby was full of patriarchs and nurses eager for the start of the conference.	
+backwards and forwards	"The little girl rocked backwards and forwards on the swing at the park.		"	
+backwards and forwards	"The little girl rocked forwards and backwards on the swing at the park.		"	
+king and queen	The loud trumpets announced the return of the king and queen from abroad.	
+king and queen	The loud trumpets announced the return of the queen and king from abroad.	
+therapy and vacations	The man managed to raise his spirits with therapy and vacations after going through a tough divorce.	
+therapy and vacations	The man managed to raise his spirits with vacations and therapy after going through a tough divorce.	
+fork and knife	"The man was embarassed to learn that he had been holding his fork and knife wrong for years.		"	
+fork and knife	"The man was embarassed to learn that he had been holding his knife and fork wrong for years.		"	
+child and mother	The man went out of his way to help the child and mother who were looking lost at the airport.	
+child and mother	The man went out of his way to help the mother and child who were looking lost at the airport.	
+coroners and senators	The media hounded various coroners and senators about the case of the murdered politician.	
+coroners and senators	The media hounded various senators and coroners about the case of the murdered politician.	
+actresses and lumberjacks	The number of actresses and lumberjacks living in this neighborhood never ceases to surprise me.	
+actresses and lumberjacks	The number of lumberjacks and actresses living in this neighborhood never ceases to surprise me.	
+brothers and sisters	"The oldest son in the large family was often overwhelmed by his brothers and sisters when he was made to babysit.		"	
+brothers and sisters	"The oldest son in the large family was often overwhelmed by his sisters and brothers when he was made to babysit.		"	
+horses and loons	The painting featured a natural landscape complete with horses and loons roaming freely.	
+horses and loons	The painting featured a natural landscape complete with loons and horses roaming freely.	
+marooned and missing	The people on the flight were marooned and missing after a crash landing on the island.	
+marooned and missing	The people on the flight were missing and marooned after a crash landing on the island.	
+litter and newts	The pet store was full of litter and newts when Martha visited on Saturday.	
+litter and newts	The pet store was full of newts and litter when Martha visited on Saturday.	
+gelatin and lard	The picky toddler refused to eat anything with gelatin and lard in it.	
+gelatin and lard	The picky toddler refused to eat anything with lard and gelatin in it.	
+marooned and missing	The pirate was marooned and missing for nearly five months.	
+marooned and missing	The pirate was missing and marooned for nearly five months.	
+lankier and lanky	"The players on the team were lankier and lanky, as though it were a requirement for joining."	
+lankier and lanky	"The players on the team were lanky and lankier, as though it were a requirement for joining."	
+address and name	"The post office was not sure what to do with the child's letter, as the address and name were both illegible."	
+address and name	"The post office was not sure what to do with the child's letter, as the name and address were both illegible."	
+chanting and enchanting	The practice of chanting and enchanting was common in the cult Mary joined.	
+chanting and enchanting	The practice of enchanting and chanting was common in the cult Mary joined.	
+intents and purposes	The president made his intents and purposes for the law very clear in his speech.	
+intents and purposes	The president made his purposes and intents for the law very clear in his speech.	
+campfires and wildfires	The ranger warned that proper containment was the only barrier between campfires and wildfires in this dry weather.	
+campfires and wildfires	The ranger warned that proper containment was the only barrier between wildfires and campfires in this dry weather.	
+campfires and wildfires	The rangers seemed to act like campfires and wildfires were the same thing.	
+campfires and wildfires	The rangers seemed to act like wildfires and campfires were the same thing.	
+chauffeurs and stewardesses	The rich actress had many chauffeurs and stewardesses to wait on her.	
+chauffeurs and stewardesses	The rich actress had many stewardesses and chauffeurs to wait on her.	
+groundskeeper and superintendent	"The scandal got most of the staff fired, leaving only the groundskeeper and superintendent at the school in the end."	
+groundskeeper and superintendent	"The scandal got most of the staff fired, leaving only the superintendent and groundskeeper at the school in the end."	
+peace and war	The seemingly endless cycle of peace and war made it difficult for the lower class to establish stable lives.	
+peace and war	The seemingly endless cycle of war and peace made it difficult for the lower class to establish stable lives.	
+annoying and teal	The snobby neighborhood thought that the annoying and teal house on the corner should be repainted.	
+annoying and teal	The snobby neighborhood thought that the teal and annoying house on the corner should be repainted.	
+litter and newts	"The store had a variety of litter and newts, which made choosing one very hard."	
+litter and newts	"The store had a variety of newts and litter, which made choosing one very hard."	
+loss and profit	"The struggling businessman didn't understand loss and profit as well as he should have.		"	
+loss and profit	"The struggling businessman didn't understand profit and loss as well as he should have.		"	
+determined and forgettable	The student who was both determined and forgettable ended up doing very well in the class.	
+determined and forgettable	The student who was both forgettable and determined ended up doing very well in the class.	
+vocabulary and vowels	The teacher explained the concepts of vocabulary and vowels after the student asked a question.	
+vocabulary and vowels	The teacher explained the concepts of vowels and vocabulary after the student asked a question.	
+cherries and llamas	The third grade class saw cherries and llamas at the state fair.	
+cherries and llamas	The third grade class saw llamas and cherries at the state fair.	
+bishops and seamstresses	The town square was full of bishops and seamstresses at the time of the festival.	
+bishops and seamstresses	The town square was full of seamstresses and bishops at the time of the festival.	
+east and west	"The train tracks running east and west fell into disrepair as they became obsolete.		"	
+east and west	"The train tracks running west and east fell into disrepair as they became obsolete.		"	
+demand and supply	"The weaver tried to keep up with demand and supply when refugees and immigrants flooded the small town.		"	
+demand and supply	"The weaver tried to keep up with supply and demand when refugees and immigrants flooded the small town.		"	
+abashed and sorry	The woman was abashed and sorry when she realized her mistake.	
+abashed and sorry	The woman was sorry and abashed when she realized her mistake.	
+felines and quails	The zoologist took time to document the variety of felines and quails in the area.	
+felines and quails	The zoologist took time to document the variety of quails and felines in the area.	
+church and state	There is a lot of debate about the separation of church and state is being interpreted too literally in today's society.	
+church and state	There is a lot of debate about the separation of state and church is being interpreted too literally in today's society.	
+demand and supply	"There is an imbalance of demand and supply for books in the digital age.		"	
+demand and supply	"There is an imbalance of supply and demand for books in the digital age.		"	
+magazines and newspapers	There is much concern about the future of magazines and newspapers in a society that is increasingly online.	
+magazines and newspapers	There is much concern about the future of newspapers and magazines in a society that is increasingly online.	
+blankets and kittens	There was a giant heap of blankets and kittens in the middle of the living room floor.	
+blankets and kittens	There was a giant heap of kittens and blankets in the middle of the living room floor.	
+bishops and seamstresses	There was a huge increase in transactions between bishops and seamstresses in the weeks prior to the ceremony.	
+bishops and seamstresses	There was a huge increase in transactions between seamstresses and bishops in the weeks prior to the ceremony.	
+felines and quails	There were always felines and quails in the woods behind my house.	
+felines and quails	There were always quails and felines in the woods behind my house.	
+men and women	"There were an equal number of men and women who applied to the business school this year.		"	
+men and women	"There were an equal number of women and men who applied to the business school this year.		"	
+bishops and seamstresses	There were many bishops and seamstresses in the small town where I grew up.	
+bishops and seamstresses	There were many seamstresses and bishops in the small town where I grew up.	
+bride and groom	"They had a long engagement, so the bride and groom were excited that it was finally their wedding day."	
+bride and groom	"They had a long engagement, so the groom and bride were excited that it was finally their wedding day."	
+ducks and peanuts	They saw many ducks and peanuts on their trip to the zoo.	
+ducks and peanuts	They saw many peanuts and ducks on their trip to the zoo.	
+actresses and lumberjacks	This bar is popular among the actresses and lumberjacks who live in the neighborhood.	
+actresses and lumberjacks	This bar is popular among the lumberjacks and actresses who live in the neighborhood.	
+shares and stocks	Valerie didn't know how to buy shares and stocks so she asked a friend to help her.	
+shares and stocks	Valerie didn't know how to buy stocks and shares so she asked a friend to help her.	
+campfires and wildfires	We encountered many campfires and wildfires on our hike through the wilderness last weekend.	
+campfires and wildfires	We encountered many wildfires and campfires on our hike through the wilderness last weekend.	
+magazines and newspapers	"When he went to bookstores, Peter usually looked at magazines and newspapers instead of novels.		"	
+magazines and newspapers	"When he went to bookstores, Peter usually looked at newspapers and magazines instead of novels.		"	
+chauffeurs and stewardesses	"When I met many chauffeurs and stewardesses at a party, I started questioning my job."	
+chauffeurs and stewardesses	"When I met many stewardesses and chauffeurs at a party, I started questioning my job."	
+cherries and llamas	"When I was a kid, cherries and llamas were my favorite things.		"	
+cherries and llamas	"When I was a kid, llamas and cherries were my favorite things.		"	
+bride and groom	"When the band played them a demo of the song they wanted, the bride and groom decided to look for a different one."	
+bride and groom	"When the band played them a demo of the song they wanted, the groom and bride decided to look for a different one."	
+error and trial	"While all can agree that error and trial is effective, there are often better ways to solve problems.		"	
+error and trial	"While all can agree that trial and error is effective, there are often better ways to solve problems.		"	
+flowers and zinnias	"While walking my dog, I admired the flowers and zinnias lining the gardens in the neighborhood."	
+flowers and zinnias	"While walking my dog, I admired the zinnias and flowers lining the gardens in the neighborhood."	
+intents and purposes	"With some difficulty, I inferred the intents and purposes of the new committee from the vague speeches they gave."	
+intents and purposes	"With some difficulty, I inferred the purposes and intents of the new committee from the vague speeches they gave."	
