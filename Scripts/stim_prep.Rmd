@@ -13,22 +13,81 @@ library(tidyverse)
 ## Preparing Data
 
 ```{r}
-original_data = read_csv('../Data/more binomials sentences.csv') 
+original_data = read_csv('../Data/more binomials sentences test.csv') 
+
+#ml_2015_data = read_csv('../Data/corpus_sentences.csv')
+# 
+# ml_2015_data = ml_2015_data %>%
+#   mutate('Binomial (Alphabetical)' = paste0(WordA, ' and ', WordB)) %>%
+#   select('Binomial (Alphabetical)', `Sentence (WordA and WordB)`, `Sentence (WordB and WordA)`)
 
 data = original_data %>%
-  rowwise() %>%
-  mutate(alpha_ordering = grepl(`Binomial (Alphabetical)`, Sentence, ignore.case = T))
+  pivot_longer(cols = `Sentence (alphabetical)`:`Sentence (nonalphabetical)`,
+               names_to = 'Sentence Type',
+               values_to = 'Target Sentence') %>%
+  pivot_longer(cols = `Prime (alphabetical)`:`Prime (unrelated)`,
+               names_to = 'Prime Type',
+               values_to = 'Prime Sentence') %>%
+  mutate(condition = 
+           ifelse(`Prime Type` == 'Prime (alphabetical)' & `Sentence Type` == 'Sentence (alphabetical)', 1,
+                  ifelse(`Prime Type` == 'Prime (alphabetical)' & `Sentence Type` == 'Sentence (nonalphabetical)', 2, ifelse(`Prime Type` == 'Prime (nonalphabetical)' & `Sentence Type` == 'Sentence (alphabetical)', 3, ifelse(`Prime Type` == 'Prime (nonalphabetical)' & `Sentence Type` == 'Sentence (nonalphabetical)', 4, ifelse(`Prime Type` == 'Prime (unrelated)' & `Sentence Type` == 'Sentence (alphabetical)', 5, 6))))))
 
-data_alpha = data %>% 
-  filter(alpha_ordering == T)
 
-data_nonalpha = data %>%
-  filter(alpha_ordering == F)
+# data = original_data %>%
+#   rowwise() %>%
+#   mutate(alpha_ordering = grepl(`Binomial (Alphabetical)`, Sentence, ignore.case = T))
+# 
+# data_alpha = data %>% 
+#   filter(alpha_ordering == T)
+# 
+# data_nonalpha = data %>%
+#   filter(alpha_ordering == F)
+# 
+# 
+# data_final = data_alpha %>%
+#   left_join(data_nonalpha, by = c('Binomial (Alphabetical)', 'Item')) %>%
+#   rename('Sentence (alphabetical)' = Sentence.x) %>%
+#   rename('Sentence (nonalphabetical)' = Sentence.y) %>%
+#   select(-c('alpha_ordering.x', 'alpha_ordering.y'))
+
+#counterbalancing
+
+counterbalanced_data = data %>%
+  group_by(Item) %>%
+  mutate(list = sample(1:6, size = 6)) %>%
+  rename('audio' = `Prime Sentence`) %>%
+  rename('Sentence' = `Target Sentence`)
 
 
-data_final = data_alpha %>%
-  left_join(data_nonalpha, by = c('Binomial (Alphabetical)', 'Item')) %>%
-  rename('Sentence (alphabetical)' = Sentence.x) %>%
-  rename('Sentence (nonalphabetical)' = Sentence.y) %>%
-  select(-c('alpha_ordering.x', 'alpha_ordering.y'))
+
+list1 = counterbalanced_data %>%
+  filter(list == 1)
+
+list2 = counterbalanced_data %>%
+  filter(list == 2)
+
+list3 = counterbalanced_data %>%
+  filter(list == 3)
+
+list4 = counterbalanced_data %>%
+  filter(list == 4)
+
+list5 = counterbalanced_data %>%
+  filter(list == 5)
+
+list6 = counterbalanced_data %>%
+  filter(list == 6)
+
+pilot_list = list1 %>%
+  filter(`Prime Type` == 'Prime (unrelated)')
+
+write_csv(pilot_list, '../Data/pilot_list.csv')
+```
+
+```{r}
+every_binomial = read_csv('../Data/every_binomial.csv')
+
+every_binomial = every_binomial %>%
+  separate(`Binomial (Alphabetical)`, into = c('word1', 'and', 'word2'), sep = ' ', remove = F) %>%
+  select(-'and')
 ```
