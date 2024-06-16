@@ -28,7 +28,7 @@ data = original_data %>%
   pivot_longer(cols = `Prime (alphabetical)`:`Prime (unrelated)`,
                names_to = 'Prime Type',
                values_to = 'Prime Sentence') %>%
-  mutate(condition = 
+  mutate(condition =  #note to self: case_when() is better to use in these casess
            ifelse(`Prime Type` == 'Prime (alphabetical)' & `Sentence Type` == 'Sentence (alphabetical)', 1,
                   ifelse(`Prime Type` == 'Prime (alphabetical)' & `Sentence Type` == 'Sentence (nonalphabetical)', 2, ifelse(`Prime Type` == 'Prime (nonalphabetical)' & `Sentence Type` == 'Sentence (alphabetical)', 3, ifelse(`Prime Type` == 'Prime (nonalphabetical)' & `Sentence Type` == 'Sentence (nonalphabetical)', 4, ifelse(`Prime Type` == 'Prime (unrelated)' & `Sentence Type` == 'Sentence (alphabetical)', 5, 6))))))
 
@@ -90,4 +90,7 @@ every_binomial = read_csv('../Data/every_binomial.csv')
 every_binomial = every_binomial %>%
   separate(`Binomial (Alphabetical)`, into = c('word1', 'and', 'word2'), sep = ' ', remove = F) %>%
   select(-'and')
+
+#write_csv(every_binomial, '../Data/every_binomial_v2.csv')
+
 ```

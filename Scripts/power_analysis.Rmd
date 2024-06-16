@@ -1,0 +1,26 @@
+---
+title: "Power Analysis"
+author: "Zachary Houghton"
+date: "2024-06-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(brms)
+```
+
+# Power analysis
+
+Before we can generate our data, we need to specify our model structure because that will be our data generation procedure.
+
+What we care about is whether whether the difference between condition where the prime is alphabetical and the sentence is alphabetical (condition 1) and the condition where the prime is unrelated and the sentence is alphabetical (condition 6) is bigger/smaller/the same as the difference between the condition where the prime is alphabetical and the sentence is nonalphabetical (condition 2) and the condition where the prime is unrelated and the sentence is nonalphabetical (condition 6).
+
+So in other words, we care about whether the difference in reading times between condition 6 and condition 1 are bigger/smaller/the same as the difference in reading times between condition 6 and condition 2. (and we care about the analogous situation with the nonalphabetical primes).
+
+We can use a treatment coded model for this.
+
+## Data generation
+
+Our data generation procedure will be...
