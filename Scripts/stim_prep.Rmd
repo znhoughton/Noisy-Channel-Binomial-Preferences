@@ -106,35 +106,39 @@ full_data = full_data %>%
     is.na(`Sentence Type`) ~ 'filler',
     !is.na(`Sentence Type`) ~ `Prime Type`))
 
+col_names = c("Item", "Binomial", "WordA", "WordB", "Questions", "Answer", "SentenceType", "TargetSentence", "PrimeType", "Prime", "FilenamePrime", "Condition", "List")
+
+colnames(full_data) = col_names
+
 list1 = full_data %>%
-  filter(list == 1 | list == 0)
+  filter(List == 1 | List == 0)
 
 list2 = full_data %>%
-  filter(list == 2 | list == 0)
+  filter(List == 2 | List == 0)
 
 list3 = full_data %>%
-  filter(list == 3 | list == 0)
+  filter(List == 3 | List == 0)
 
 list4 = full_data %>%
-  filter(list == 4 | list == 0)
+  filter(List == 4 | List == 0)
 
 list5 = full_data %>%
-  filter(list == 5 | list == 0)
+  filter(List == 5 | List == 0)
 
 list6 = full_data %>%
-  filter(list == 6 | list == 0)
+  filter(List == 6 | List == 0)
 
 #pilot_list = list1 %>%
   #filter(`Prime Type` == 'Prime (unrelated)')
 
 #write_csv(pilot_list, '../Data/pilot_list.csv')
 
-write_csv(list1, '../Data/list1')
-write_csv(list2, '../Data/list2')
-write_csv(list3, '../Data/list3')
-write_csv(list4, '../Data/list4')
-write_csv(list5, '../Data/list5')
-write_csv(list6, '../Data/list6')
+write_csv(list1, '../Data/list1.csv')
+write_csv(list2, '../Data/list2.csv')
+write_csv(list3, '../Data/list3.csv')
+write_csv(list4, '../Data/list4.csv')
+write_csv(list5, '../Data/list5.csv')
+write_csv(list6, '../Data/list6.csv')
 ```
 
 ```{r}
