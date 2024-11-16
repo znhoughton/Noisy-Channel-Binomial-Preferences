@@ -106,7 +106,7 @@ full_data = full_data %>%
     is.na(`Sentence Type`) ~ 'filler',
     !is.na(`Sentence Type`) ~ `Prime Type`))
 
-col_names = c("Item", "Binomial", "WordA", "WordB", "Questions", "Answer", "SentenceType", "TargetSentence", "PrimeType", "Prime", "FilenamePrime", "Condition", "List")
+col_names = c("Item", "Binomial", "WordA", "WordB", "Questions", "Answer", "SentenceType", "TargetSentence", "PrimeType", "Prime", "audio", "Condition", "List")
 
 colnames(full_data) = col_names
 
