@@ -88,10 +88,10 @@ full_data = counterbalanced_data %>%
 full_data = full_data %>%
   mutate(`Filename Prime` = paste0(gsub(" ", "_", Prime), "wav")) %>%
   mutate(`Filename Prime` = case_when(
-    `Prime Type` == 'alphabetical' ~ paste0("../audio/prime_alpha/", `Filename Prime`),
-    `Prime Type` == 'nonalphabetical' ~ paste0("../audio/prime_nonalpha/", `Filename Prime`),
-    `Prime Type` == 'unrelated' ~ paste0("../audio/prime_unrelated/", `Filename Prime`),
-    is.na(`Prime Type`) ~ paste0("../audio/prime_filler/", `Filename Prime`)
+    `Prime Type` == 'alphabetical' ~ paste0("audio/prime_alpha/", `Filename Prime`),
+    `Prime Type` == 'nonalphabetical' ~ paste0("audio/prime_nonalpha/", `Filename Prime`),
+    `Prime Type` == 'unrelated' ~ paste0("audio/prime_unrelated/", `Filename Prime`),
+    is.na(`Prime Type`) ~ paste0("audio/prime_filler/", `Filename Prime`)
   ))
 
 full_data = full_data %>%
@@ -106,9 +106,12 @@ full_data = full_data %>%
     is.na(`Sentence Type`) ~ 'filler',
     !is.na(`Sentence Type`) ~ `Prime Type`))
 
-col_names = c("Item", "Binomial", "WordA", "WordB", "Questions", "Answer", "SentenceType", "TargetSentence", "PrimeType", "Prime", "audio", "Condition", "List")
+col_names = c("Item", "Binomial", "WordA", "WordB", "Questions", "Answer", "SentenceType", "Sentence", "PrimeType", "Prime", "audio", "Condition", "List")
+
 
 colnames(full_data) = col_names
+
+full_data$audio = gsub("'", "\\\\'", full_data$audio)
 
 list1 = full_data %>%
   filter(List == 1 | List == 0)
@@ -133,12 +136,12 @@ list6 = full_data %>%
 
 #write_csv(pilot_list, '../Data/pilot_list.csv')
 
-write_csv(list1, '../Data/list1.csv')
-write_csv(list2, '../Data/list2.csv')
-write_csv(list3, '../Data/list3.csv')
-write_csv(list4, '../Data/list4.csv')
-write_csv(list5, '../Data/list5.csv')
-write_csv(list6, '../Data/list6.csv')
+write_csv(list1, '../Data/list_1.csv')
+write_csv(list2, '../Data/list_2.csv')
+write_csv(list3, '../Data/list_3.csv')
+write_csv(list4, '../Data/list_4.csv')
+write_csv(list5, '../Data/list_5.csv')
+write_csv(list6, '../Data/list_6.csv')
 ```
 
 ```{r}
