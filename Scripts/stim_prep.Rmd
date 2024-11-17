@@ -104,7 +104,7 @@ full_data = full_data %>%
 full_data = full_data %>%
   mutate(`Sentence Type` = case_when(
     is.na(`Sentence Type`) ~ 'filler',
-    !is.na(`Sentence Type`) ~ `Prime Type`))
+    !is.na(`Sentence Type`) ~ `Sentence Type`))
 
 col_names = c("Item", "Binomial", "WordA", "WordB", "Questions", "Answer", "SentenceType", "Sentence", "PrimeType", "Prime", "audio", "Condition", "List")
 
@@ -145,6 +145,10 @@ write_csv(list6, '../Data/list_6.csv')
 ```
 
 ```{r}
+
+```
+
+```{r}
 every_binomial = read_csv('../Data/every_binomial.csv')
 genprefs = read_csv('../Data/corpus_sentences.csv')
 
@@ -168,4 +172,26 @@ binomials_strong_order_prefs = binomial_data %>%
 
 length(unique(binomials_strong_order_prefs$`Binomial (Alphabetical)`))
 
+```
+
+```{r}
+genpref_relfreq = binomial_data %>%
+  select(`Binomial (Alphabetical)`, RelFreq, GenPref)
+
+every_binomial = genpref_relfreq %>%
+  distinct(`Binomial (Alphabetical)`, .keep_all = T)
+
+full_data = full_data %>%
+  left_join(every_binomial, by = c("Binomial" = "Binomial (Alphabetical)")) %>%
+  mutate(target_freq = case_when(
+    (SentenceType == 'Sentence (alphabetical)' & RelFreq > 0) | (SentenceType == 'Sentence (nonalphabetical)' & RelFreq < 0) ~ 'frequent',
+    (SentenceType == 'Sentence (alphabetical)' & RelFreq < 0) | (SentenceType == 'Sentence (nonalphabetical)' & RelFreq > 0) ~ 'not-frequent'
+  )) %>%
+  mutate(prime_freq = case_when(
+    (PrimeType == 'alphabetical' & RelFreq > 0) | (PrimeType == 'nonalphabetical' & RelFreq < 0) ~ 'frequent',
+    (PrimeType == 'alphabetical' & RelFreq < 0) | (PrimeType == 'nonalphabetical' & RelFreq > 0) ~ 'not-frequent',
+    PrimeType == 'unrelated' ~ 'unrelated'
+  ))
+
+write_csv(full_data, '../Data/key.csv')
 ```
