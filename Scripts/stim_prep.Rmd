@@ -34,12 +34,21 @@ data = experimental_items %>%
            ifelse(`Prime Type` == 'alphabetical' & `Sentence Type` == 'Sentence (alphabetical)', 1,
                   ifelse(`Prime Type` == 'alphabetical' & `Sentence Type` == 'Sentence (nonalphabetical)', 2, ifelse(`Prime Type` == 'nonalphabetical' & `Sentence Type` == 'Sentence (alphabetical)', 3, ifelse(`Prime Type` == 'nonalphabetical' & `Sentence Type` == 'Sentence (nonalphabetical)', 4, ifelse(`Prime Type` == 'unrelated' & `Sentence Type` == 'Sentence (alphabetical)', 5, 6))))))
 
+excluded_items = c('diagnosis and treatment', 'god and man', 'men and officers', 'man and woman')
+data = data %>%
+  filter(!`Binomial (Alphabetical)` %in% excluded_items)
+
+data = data %>% 
+  arrange(Item) %>%
+  mutate(Item = rep(1:length(unique(Item)), each = 6))
+
 #condition1: alpha prime, alpha sentence
 #condition2: alpha prime, nonalpha sentence
 #condition3: nonalpha prime, alpha sentence
 #condition4: nonalpha prime, nonalpha sentence
 #condition5: unrelated prime, alpha sentence
 #condition6: unrelated prime, nonalpha sentence
+
 
 
 
@@ -54,10 +63,11 @@ counterbalanced_data = data
 shuffled_items = sample(unique(counterbalanced_data$Item))
 
 counterbalanced_data = counterbalanced_data %>%
+  sample_frac(1) %>%
   mutate(Item = factor(Item, levels = shuffled_items)) %>%
   arrange(Item, condition) %>%
   mutate(Item = as.integer(as.character(Item))) %>%
-  mutate(list = ((condition + Item - 2) %% 6) + 1)
+  mutate(list = ((condition + Item) %% 6 + 1))
 
 counterbalanced_data = counterbalanced_data %>%
   mutate(`Target Sentence` = paste0('+ ', `Target Sentence`))
@@ -73,7 +83,8 @@ condition_counts = counterbalanced_data %>%
 
 
 filler_data = read_csv('../Data/Conditions - Filler Items.csv') %>%
-  mutate(list = 0)
+  mutate(list = 0) %>%
+  sample_n(size = 30)
 
 #filler_data = sample_n(filler_data, 50, replace = F, seed=10)
   
@@ -111,7 +122,7 @@ col_names = c("Item", "Binomial", "WordA", "WordB", "Questions", "Answer", "Sent
 
 colnames(full_data) = col_names
 
-full_data$audio = gsub("'", "\\\\'", full_data$audio)
+full_data$audio = gsub("'", "", full_data$audio)
 
 list1 = full_data %>%
   filter(List == 1 | List == 0)
