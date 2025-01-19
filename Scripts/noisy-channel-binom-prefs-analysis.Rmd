@@ -1,0 +1,55 @@
+---
+title: "noisy-channel-binom-pref-analysis"
+author: "Zachary Houghton"
+date: "2025-01-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(brms)
+```
+
+## Load Data
+
+```{r}
+pilot_data = read.csv('../Data/pilot_results.csv', quote = "\"")
+
+data_analysis = pilot_data %>%
+  select('participant', 'List', 'Condition', 'WordA', 'WordB', 'Binomial', 'PrimeType', 'Prime', 'Sentence', 'SentenceType', 'Questions', 'Answer', 'key_resp.corr', 'key_resp_4.keys', 'conditionFile', 'trials.thisN', starts_with("Word")) %>%
+  filter(!is.na(List)) %>%
+  mutate(correct = ifelse(`key_resp_4.keys` == Answer, 1, 0)) %>%
+  group_by(participant) %>%
+  mutate('OverallAcc' = mean(correct))
+
+data_analysis = data_analysis %>%
+  mutate(sentence_split = str_split(Sentence, " "))
+
+data_analysis = data_analysis %>%
+  rowwise() %>%  # Ensures per-row operation
+  mutate(word_index = case_when(
+    SentenceType == 'Sentence (alphabetical)' ~ which(sentence_split == WordA)[1],  # Use [1] to ensure a single value
+    TRUE ~ NA_real_,  # Default value for rows not matching the condition
+    SentenceType == 'Sentence (nonalphabetical)' ~ which(sentence_split == WordB)[1],  # Use [1] to ensure a single value
+    TRUE ~ NA_real_
+  )) %>%
+  ungroup()  # Remove rowwise grouping
+
+
+
+
+data_analysis = data_analysis %>%
+  mutate(word_index = word_index - 1)
+
+data_analysis = data_analysis %>%
+  filter(!is.na(word_index)) %>%
+  mutate(target_cols = map(word_index, ~paste0("Word", .x:(.x + 2))))
+
+data_analysis = data_analysis %>%
+  mutate(reading_time = mapply(function(cols, row) sum(row[cols]),
+                               target_cols,
+                               split(data_analysis, seq(nrow(data_analysis)))))
+
+
+```
