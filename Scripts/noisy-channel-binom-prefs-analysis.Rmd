@@ -17,7 +17,7 @@ library(brms)
 pilot_data = read.csv('../Data/pilot_results.csv', quote = "\"")
 
 data_analysis = pilot_data %>%
-  select('participant', 'List', 'Condition', 'WordA', 'WordB', 'Binomial', 'PrimeType', 'Prime', 'Sentence', 'SentenceType', 'Questions', 'Answer', 'key_resp.corr', 'key_resp_4.keys', 'conditionFile', 'trials.thisN', starts_with("Word")) %>%
+  select('participant', 'Item', 'List', 'Condition', 'WordA', 'WordB', 'Binomial', 'PrimeType', 'Prime', 'Sentence', 'SentenceType', 'Questions', 'Answer', 'key_resp.corr', 'key_resp_4.keys', 'conditionFile', 'trials.thisN', starts_with("Word")) %>%
   filter(!is.na(List)) %>%
   mutate(correct = ifelse(`key_resp_4.keys` == Answer, 1, 0)) %>%
   group_by(participant) %>%
@@ -29,9 +29,8 @@ data_analysis = data_analysis %>%
 data_analysis = data_analysis %>%
   rowwise() %>%  # Ensures per-row operation
   mutate(word_index = case_when(
-    SentenceType == 'Sentence (alphabetical)' ~ which(sentence_split == WordA)[1],  # Use [1] to ensure a single value
-    TRUE ~ NA_real_,  # Default value for rows not matching the condition
-    SentenceType == 'Sentence (nonalphabetical)' ~ which(sentence_split == WordB)[1],  # Use [1] to ensure a single value
+    SentenceType == 'Sentence (alphabetical)' ~ which(sentence_split == WordA)[1],
+    SentenceType == 'Sentence (nonalphabetical)' ~ which(sentence_split == WordB)[1],
     TRUE ~ NA_real_
   )) %>%
   ungroup()  # Remove rowwise grouping
@@ -52,4 +51,59 @@ data_analysis = data_analysis %>%
                                split(data_analysis, seq(nrow(data_analysis)))))
 
 
+```
+
+## Plots
+
+```{r}
+
+key = read_csv('../Data/key.csv')
+
+
+data_analysis1 = data_analysis %>%
+  left_join(key) %>%
+  filter(prime_freq != 'frequent') %>%
+  mutate(log_reading_time = log(reading_time))
+  
+
+ggplot(data_plot1, aes(x = target_freq, y = mean, color = prime_freq)) +
+  geom_point(position = position_dodge(width = 0.5), size = 3) + # Dodge points
+  geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd), 
+                position = position_dodge(width = 0.5), width = 0.2) + # Dodge error bars
+  labs(
+    title = "Log Reading Time of Polarized Binomials",
+    x = "Sentence Type",
+    y = "Log RT",
+    color = "Prime Type"
+  ) +
+  theme_minimal()
+```
+
+## Analysis
+
+```{r}
+
+data_analysis1$prime_freq = factor(data_analysis1$prime_freq, levels = c('unrelated', 'not-frequent'))
+data_analysis1$target_freq = factor(data_analysis1$target_freq, levels = c('not-frequent', 'frequent'))
+```
+
+### model
+
+```{r}
+
+data_analysis1$prime_freq = relevel(data_analysis1$prime_freq, ref = 'unrelated')
+data_analysis1$target_freq = relevel(data_analysis1$target_freq, ref = 'not-frequent')
+
+m1 = brm(log_reading_time ~ prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant) + (1 | Sentence),
+          data = data_analysis1,
+          iter = 6000, 
+          warmup = 3000,
+          chains = 4,
+          core = 4,
+          #file = 'pilot_model'
+)
+
+fixef(m1)
+fixef_df = data.frame(conditional_effects(m1)[1], plot=F)
 ```

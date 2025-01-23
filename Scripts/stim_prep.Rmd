@@ -91,6 +91,10 @@ filler_data = read_csv('../Data/Conditions - Filler Items.csv') %>%
 
 filler_data$condition = as.numeric(filler_data$condition)
 
+filler_data = filler_data %>%
+  mutate(`Target Sentence` = paste0('+ ', `Target Sentence`))
+
+
 
 
 full_data = counterbalanced_data %>%
@@ -123,6 +127,11 @@ col_names = c("Item", "Binomial", "WordA", "WordB", "Questions", "Answer", "Sent
 colnames(full_data) = col_names
 
 full_data$audio = gsub("'", "", full_data$audio)
+
+full_data$audio = sub("\\.wav$", "", full_data$audio)
+full_data$audio = gsub("\\.", "", full_data$audio)
+full_data$audio = paste0(full_data$audio, '.wav')
+
 
 list1 = full_data %>%
   filter(List == 1 | List == 0)
