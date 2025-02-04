@@ -9,15 +9,23 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(brms)
+
+#install.packages("./cplDataAnalysis_0.1.tar.gz", repos = NULL,type="source")
+library(cplDataAnalysis)
 ```
 
 ## Load Data
 
 ```{r}
-pilot_data = read.csv('../Data/pilot_results.csv', quote = "\"")
+pilot_data = read.csv('../Data/pilot_results2.csv', quote = "\"")
 
-data_analysis = pilot_data %>%
-  select('participant', 'Item', 'List', 'Condition', 'WordA', 'WordB', 'Binomial', 'PrimeType', 'Prime', 'Sentence', 'SentenceType', 'Questions', 'Answer', 'key_resp.corr', 'key_resp_4.keys', 'conditionFile', 'trials.thisN', starts_with("Word")) %>%
+pilot_data$date = as.Date(pilot_data$date)
+data = pilot_data
+# data = pilot_data %>%
+#   filter(date > as.Date("2025-01-24"))
+
+data_analysis = data %>%
+  select('participant', 'Item', 'List', 'Condition', 'WordA', 'WordB', 'Binomial', 'PrimeType', 'Prime', 'Sentence', 'SentenceType', 'Questions', 'Answer', 'key_resp.corr', 'key_resp_4.keys', 'trials.thisN', starts_with("Word")) %>%
   filter(!is.na(List)) %>%
   mutate(correct = ifelse(`key_resp_4.keys` == Answer, 1, 0)) %>%
   group_by(participant) %>%
@@ -28,7 +36,7 @@ data_analysis = data_analysis %>%
 
 data_analysis = data_analysis %>%
   rowwise() %>%  # Ensures per-row operation
-  mutate(word_index = case_when(
+  mutate(target_word_index = case_when(
     SentenceType == 'Sentence (alphabetical)' ~ which(sentence_split == WordA)[1],
     SentenceType == 'Sentence (nonalphabetical)' ~ which(sentence_split == WordB)[1],
     TRUE ~ NA_real_
@@ -39,16 +47,116 @@ data_analysis = data_analysis %>%
 
 
 data_analysis = data_analysis %>%
-  mutate(word_index = word_index - 1)
+  mutate(target_word_index = target_word_index - 1)
 
 data_analysis = data_analysis %>%
-  filter(!is.na(word_index)) %>%
-  mutate(target_cols = map(word_index, ~paste0("Word", .x:(.x + 2))))
+  filter(!is.na(target_word_index)) %>%
+  mutate(target_cols = map(target_word_index, ~paste0("Word", .x:(.x + 2))))
 
-data_analysis = data_analysis %>%
-  mutate(reading_time = mapply(function(cols, row) sum(row[cols]),
-                               target_cols,
-                               split(data_analysis, seq(nrow(data_analysis)))))
+
+
+data_analysis1 = data_analysis %>%
+  pivot_longer(cols = matches("^Word[0-9]+$"), names_to = 'word_index', names_prefix = 'Word', values_to = 'reading_time')
+
+# 
+# data_analysis1 = data_analysis %>%
+#   pivot_longer(cols = c(paste0("Word", 0:16)), names_to = 'word_index', names_prefix = 'Word', values_to = 'reading_time') 
+
+
+
+data_analysis1 = data_analysis1 %>%
+  mutate(
+    words = str_split(Sentence, "\\s+"),  # Split sentences into words
+    extracted_word = mapply(function(word_list, idx) {
+      adj_idx = as.numeric(idx) + 1  # Adjust for 0-based index
+      if (adj_idx > length(word_list) | adj_idx < 1) NA else word_list[adj_idx]
+    }, words, word_index)
+  ) %>%
+  select(-words)  # Drop the intermediate list column
+
+data_analysis1$word_index = as.numeric(data_analysis1$word_index)
+data_analysis1$target_word_index = as.numeric(data_analysis1$target_word_index)
+data_analysis1$reading_time = data_analysis1$reading_time * 1000 #conver to ms
+data_analysis1 = data_analysis1 %>%
+  ungroup() %>%
+  mutate('target' = ifelse(word_index >= target_word_index & word_index <= (target_word_index + 2), 1, 0)) %>%
+  ungroup() %>%
+  mutate('spillover' = ifelse(word_index >= (target_word_index + 3) & word_index <= (target_word_index + 5), 1, 0)) 
+
+data_analysis1 = data_analysis1 %>%
+  mutate(word_len = nchar(extracted_word))
+
+data_analysis1 = data_analysis1 %>%
+  filter(!is.na(reading_time))
+
+data_analysis1$participant = factor(data_analysis1$participant)
+data_analysis1$Item = factor(data_analysis1$Item)
+data_analysis1$rt = data_analysis1$reading_time
+
+data_analysis1 = data_analysis1 %>%
+  filter(extracted_word != '+')
+
+data_analysis1 <- data_analysis1 %>%
+  arrange(Item, word_index) %>%
+  group_by(Item) %>%
+  slice(1:(n() - 1)) %>%  # Selects all but the last row per group
+  ungroup()
+
+
+residual_rts = data.frame(residual_rts = res.rt(data_analysis1, subj.name = 'participant', wordlen.name = 'word_len'))
+
+data_analysis1$residual_rts = residual_rts$residual_rts
+
+# 
+# 
+# 
+# summary_data = data_analysis1 %>%
+#   group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct) %>%
+#   summarize(
+#     target_rt = sum(residual_rts[target == 1], na.rm = TRUE),
+#     spillover_rt = sum(residual_rts[spillover == 1], na.rm = TRUE),
+#     target_len = sum(word_len[target == 1], na.rm = T),
+#     spillover_len = sum(word_len[spillover==1], na.rm = T),
+#     .groups = "drop" 
+#   )
+# 
+# summary_data = summary_data %>%
+#   ungroup() %>%
+#   group_by(participant, Item) %>%
+#   pivot_longer(cols = c('target_rt', 'spillover_rt', 'target_len', 'spillover_len'),
+#                names_to = c("region", ".value"),
+#                names_pattern = "(.+)_(.+)")
+
+
+# code to get residual rts
+# res.rt <- function(dat, subj.name='subj', wordlen.name='wordlen',
+#                         rt.name='rt', verbose=T) {
+#   if(! is.element(wordlen.name,names(dat)))
+#     stop(paste("Error: your data frame doesn't contain a compoment for wordlength named",wordlen.name))
+#     dat <- data.frame(subj = dat[[subj.name]], wordlen = dat[[wordlen.name]],
+#                       rt = dat[[rt.name]])
+#     length.slope <- c() # just to see what typical slope is
+#     res.rt <- c() # full list of residual rts
+# 
+#     for(i in levels(dat$subj)) {
+#       wordlen.subj <- dat$wordlen[dat$subj==i]
+#       if(length(wordlen.subj) == 0)
+#         next
+#       rt.subj <- dat$rt[dat$subj==i]
+#       model <- lm(rt.subj~wordlen.subj)
+#       res.rt[dat$subj==i] <- residuals(model)
+#       length.slope <- c(length.slope, model$coef["wordlen.subj"])
+#     }
+#     mean.slope <- mean(length.slope)
+#     se.slope <- se(length.slope)
+#     if (verbose) {
+#       cat(sprintf('The mean slope was %.1f with an se of %.1f.\n',
+#                   mean.slope, se.slope))
+#     }
+#     return(res.rt)
+# }
+
+
 
 
 ```
@@ -59,24 +167,27 @@ data_analysis = data_analysis %>%
 
 key = read_csv('../Data/key.csv')
 
+key$Item = factor(key$Item)
 
-data_analysis1 = data_analysis %>%
+
+
+data_analysis1 = data_analysis1 %>%
   left_join(key) %>%
-  filter(prime_freq != 'frequent') %>%
-  mutate(log_reading_time = log(reading_time))
+  filter(prime_freq != 'frequent') 
   
-
-ggplot(data_plot1, aes(x = target_freq, y = mean, color = prime_freq)) +
-  geom_point(position = position_dodge(width = 0.5), size = 3) + # Dodge points
-  geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd), 
-                position = position_dodge(width = 0.5), width = 0.2) + # Dodge error bars
-  labs(
-    title = "Log Reading Time of Polarized Binomials",
-    x = "Sentence Type",
-    y = "Log RT",
-    color = "Prime Type"
-  ) +
-  theme_minimal()
+length(unique(data_analysis1$Item))
+# 
+# ggplot(data_plot1, aes(x = target_freq, y = mean, color = prime_freq)) +
+#   geom_point(position = position_dodge(width = 0.5), size = 3) + # Dodge points
+#   geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd), 
+#                 position = position_dodge(width = 0.5), width = 0.2) + # Dodge error bars
+#   labs(
+#     title = "Log Reading Time of Polarized Binomials",
+#     x = "Sentence Type",
+#     y = "Log RT",
+#     color = "Prime Type"
+#   ) +
+#   theme_minimal()
 ```
 
 ## Analysis
@@ -94,16 +205,65 @@ data_analysis1$target_freq = factor(data_analysis1$target_freq, levels = c('not-
 data_analysis1$prime_freq = relevel(data_analysis1$prime_freq, ref = 'unrelated')
 data_analysis1$target_freq = relevel(data_analysis1$target_freq, ref = 'not-frequent')
 
-m1 = brm(log_reading_time ~ prime_freq * target_freq + 
-            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant) + (1 | Sentence),
-          data = data_analysis1,
+data_analysis1$participant = factor(data_analysis1$participant)
+data_analysis1$Item = factor(data_analysis1$Item)
+#   
+# 
+#
+# target_region_power_data = data_analysis1 %>% 
+#   filter(target == 1) %>%
+#   filter(rt > 100 & rt < 5000) %>%
+#   group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct, prime_freq, target_freq) %>%
+#   summarize(residual_rts = sum(residual_rts)) 
+# 
+# 
+#  data_for_power = target_region_power_data %>%
+#    group_by(Item) %>%
+#    slice(1) %>%
+#    select(-residual_rts, -participant)
+# 
+ #write_csv(data_for_power, '../Data/data_for_power.csv')
+
+
+
+target_region_data = data_analysis1 %>% 
+  filter(target == 1) %>%
+  filter(rt > 100 & rt < 5000) %>%
+  filter(OverallAcc > 0.7) %>% #exclude low-accuracy participants
+  group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct, prime_freq, target_freq) %>%
+  summarize(residual_rts = sum(residual_rts))
+
+spillover_region_data = data_analysis1 %>%
+  filter(spillover == 1) %>%
+  filter(rt > 100 & rt < 5000) %>% #following M&L 2016
+  filter(OverallAcc > 0.7) %>% #exclude low-accuracy participants
+  group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct, prime_freq, target_freq) %>%
+  summarize(residual_rts = sum(residual_rts))
+
+#using 0 + Intercept syntax following: https://discourse.mc-stan.org/t/understanding-intercept-prior-in-brms/34027
+m1 = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
+          data = target_region_data,
           iter = 6000, 
           warmup = 3000,
           chains = 4,
           core = 4,
-          #file = 'pilot_model'
+          prior = c(set_prior("student_t(3, 0, 10)", class = "b"),
+                set_prior("student_t(3, 0, 24.32)", class = "sd")),
+          file = 'pilot_model_target'
+)
+
+m2 = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
+          data = spillover_region_data,
+          iter = 6000, 
+          warmup = 3000,
+          chains = 4,
+          core = 4,
+          file = 'pilot_model_spillover'
 )
 
 fixef(m1)
-fixef_df = data.frame(conditional_effects(m1)[1], plot=F)
+fixef(m2)
+#fixef_df = data.frame(conditional_effects(m1)[1], plot=F)
 ```
