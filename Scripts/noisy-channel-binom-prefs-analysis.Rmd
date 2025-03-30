@@ -880,4 +880,6 @@ percent_greater_zero = data.frame(fixef(easy_trials_model, summary = F)) %>%
 
 percent_greater_zero
 
+
+
 ```
