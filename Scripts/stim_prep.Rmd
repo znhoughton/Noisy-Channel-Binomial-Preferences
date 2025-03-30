@@ -1,0 +1,217 @@
+---
+title: "Stimuli Preparation"
+author: "Zachary Houghton"
+date: "2024-05-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Preparing Data
+
+```{r}
+experimental_items = read_csv('../Data/Conditions - Final Experimental Items.csv') 
+
+#ml_2015_data = read_csv('../Data/corpus_sentences.csv')
+# 
+# ml_2015_data = ml_2015_data %>%
+#   mutate('Binomial (Alphabetical)' = paste0(WordA, ' and ', WordB)) %>%
+#   select('Binomial (Alphabetical)', `Sentence (WordA and WordB)`, `Sentence (WordB and WordA)`)
+
+data = experimental_items %>%
+  pivot_longer(cols = `Sentence (alphabetical)`:`Sentence (nonalphabetical)`,
+               names_to = 'Sentence Type',
+               values_to = 'Target Sentence') %>%
+  pivot_longer(
+    cols = starts_with("Prime") | starts_with("Filename"),  # Select both "Prime" and "Filename"
+    names_to = c(".value", "Prime Type"),  # Split into ".value" and "Category"
+    names_pattern = "^(.*) \\((.*)\\)$"  # Regex to split the prefix and category
+  ) %>%
+  mutate(condition =  #note to self: case_when() is better to use in these casess
+           ifelse(`Prime Type` == 'alphabetical' & `Sentence Type` == 'Sentence (alphabetical)', 1,
+                  ifelse(`Prime Type` == 'alphabetical' & `Sentence Type` == 'Sentence (nonalphabetical)', 2, ifelse(`Prime Type` == 'nonalphabetical' & `Sentence Type` == 'Sentence (alphabetical)', 3, ifelse(`Prime Type` == 'nonalphabetical' & `Sentence Type` == 'Sentence (nonalphabetical)', 4, ifelse(`Prime Type` == 'unrelated' & `Sentence Type` == 'Sentence (alphabetical)', 5, 6))))))
+
+excluded_items = c('diagnosis and treatment', 'god and man', 'men and officers', 'man and woman')
+data = data %>%
+  filter(!`Binomial (Alphabetical)` %in% excluded_items)
+
+data = data %>% 
+  arrange(Item) %>%
+  mutate(Item = rep(1:length(unique(Item)), each = 6))
+
+#condition1: alpha prime, alpha sentence
+#condition2: alpha prime, nonalpha sentence
+#condition3: nonalpha prime, alpha sentence
+#condition4: nonalpha prime, nonalpha sentence
+#condition5: unrelated prime, alpha sentence
+#condition6: unrelated prime, nonalpha sentence
+
+
+
+
+############       counterbalancing   ##################
+
+# counterbalanced_data = data %>%
+#   group_by(Item) %>%
+#   mutate(list = sample(1:6, size = 6)) 
+
+counterbalanced_data = data
+
+shuffled_items = sample(unique(counterbalanced_data$Item))
+
+counterbalanced_data = counterbalanced_data %>%
+  sample_frac(1) %>%
+  mutate(Item = factor(Item, levels = shuffled_items)) %>%
+  arrange(Item, condition) %>%
+  mutate(Item = as.integer(as.character(Item))) %>%
+  mutate(list = ((condition + Item) %% 6 + 1))
+
+counterbalanced_data = counterbalanced_data %>%
+  mutate(`Target Sentence` = paste0('+ ', `Target Sentence`))
+
+counterbalanced_data %>% 
+  group_by(list) %>%
+  summarize(length(unique(Item)))
+
+condition_counts = counterbalanced_data %>%
+  group_by(list, condition) %>%
+  tally() %>%
+  ungroup
+
+
+filler_data = read_csv('../Data/Conditions - Filler Items.csv') %>%
+  mutate(list = 0) %>%
+  sample_n(size = 30)
+
+#filler_data = sample_n(filler_data, 50, replace = F, seed=10)
+  
+
+filler_data$condition = as.numeric(filler_data$condition)
+
+filler_data = filler_data %>%
+  mutate(`Target Sentence` = paste0('+ ', `Target Sentence`))
+
+
+
+
+full_data = counterbalanced_data %>%
+  full_join(filler_data)
+
+full_data = full_data %>%
+  mutate(`Filename Prime` = paste0(gsub(" ", "_", Prime), "wav")) %>%
+  mutate(`Filename Prime` = case_when(
+    `Prime Type` == 'alphabetical' ~ paste0("audio/prime_alpha/", `Filename Prime`),
+    `Prime Type` == 'nonalphabetical' ~ paste0("audio/prime_nonalpha/", `Filename Prime`),
+    `Prime Type` == 'unrelated' ~ paste0("audio/prime_unrelated/", `Filename Prime`),
+    is.na(`Prime Type`) ~ paste0("audio/prime_filler/", `Filename Prime`)
+  ))
+
+full_data = full_data %>%
+  mutate(`Prime Type` = case_when(
+    is.na(`Prime Type`) ~ 'filler',
+    !is.na(`Prime Type`) ~ `Prime Type`)
+  ) %>%
+  select(-SentenceType, -PrimeType)
+
+full_data = full_data %>%
+  mutate(`Sentence Type` = case_when(
+    is.na(`Sentence Type`) ~ 'filler',
+    !is.na(`Sentence Type`) ~ `Sentence Type`))
+
+col_names = c("Item", "Binomial", "WordA", "WordB", "Questions", "Answer", "SentenceType", "Sentence", "PrimeType", "Prime", "audio", "Condition", "List")
+
+
+colnames(full_data) = col_names
+
+full_data$audio = gsub("'", "", full_data$audio)
+
+full_data$audio = sub("\\.wav$", "", full_data$audio)
+full_data$audio = gsub("\\.", "", full_data$audio)
+full_data$audio = paste0(full_data$audio, '.wav')
+
+
+list1 = full_data %>%
+  filter(List == 1 | List == 0)
+
+list2 = full_data %>%
+  filter(List == 2 | List == 0)
+
+list3 = full_data %>%
+  filter(List == 3 | List == 0)
+
+list4 = full_data %>%
+  filter(List == 4 | List == 0)
+
+list5 = full_data %>%
+  filter(List == 5 | List == 0)
+
+list6 = full_data %>%
+  filter(List == 6 | List == 0)
+
+#pilot_list = list1 %>%
+  #filter(`Prime Type` == 'Prime (unrelated)')
+
+#write_csv(pilot_list, '../Data/pilot_list.csv')
+
+write_csv(list1, '../Data/list_1.csv')
+write_csv(list2, '../Data/list_2.csv')
+write_csv(list3, '../Data/list_3.csv')
+write_csv(list4, '../Data/list_4.csv')
+write_csv(list5, '../Data/list_5.csv')
+write_csv(list6, '../Data/list_6.csv')
+```
+
+```{r}
+
+```
+
+```{r}
+every_binomial = read_csv('../Data/every_binomial.csv')
+genprefs = read_csv('../Data/corpus_sentences.csv')
+
+every_binomial = every_binomial %>%
+  separate(`Binomial (Alphabetical)`, into = c('WordA', 'and', 'WordB'), sep = ' ', remove = F) %>%
+  select(-'and')
+
+#write_csv(every_binomial, '../Data/every_binomial_v2.csv')
+binomial_data = every_binomial %>%
+  left_join(genprefs, by = c('WordA', 'WordB')) %>%
+  drop_na(RelFreq) %>%
+  mutate(RelFreq = RelFreq - 0.5) %>% # so that values closer to zero (relfreq) mean less strong ordering preferences
+  mutate(squared_RelFreq = RelFreq**2) #so that the larger the number, the stronger the preference (instead of more negative being also strong preferences in the opposite direction)
+
+
+##squared relfreq cut off of 0.1
+##overallfreq cut off of 400,000
+
+binomials_strong_order_prefs = binomial_data %>%
+  filter(squared_RelFreq > 0.1 & OverallFreq > 400000)
+
+length(unique(binomials_strong_order_prefs$`Binomial (Alphabetical)`))
+
+```
+
+```{r}
+genpref_relfreq = binomial_data %>%
+  select(`Binomial (Alphabetical)`, RelFreq, GenPref)
+
+every_binomial = genpref_relfreq %>%
+  distinct(`Binomial (Alphabetical)`, .keep_all = T)
+
+full_data = full_data %>%
+  left_join(every_binomial, by = c("Binomial" = "Binomial (Alphabetical)")) %>%
+  mutate(target_freq = case_when(
+    (SentenceType == 'Sentence (alphabetical)' & RelFreq > 0) | (SentenceType == 'Sentence (nonalphabetical)' & RelFreq < 0) ~ 'frequent',
+    (SentenceType == 'Sentence (alphabetical)' & RelFreq < 0) | (SentenceType == 'Sentence (nonalphabetical)' & RelFreq > 0) ~ 'not-frequent'
+  )) %>%
+  mutate(prime_freq = case_when(
+    (PrimeType == 'alphabetical' & RelFreq > 0) | (PrimeType == 'nonalphabetical' & RelFreq < 0) ~ 'frequent',
+    (PrimeType == 'alphabetical' & RelFreq < 0) | (PrimeType == 'nonalphabetical' & RelFreq > 0) ~ 'not-frequent',
+    PrimeType == 'unrelated' ~ 'unrelated'
+  ))
+
+write_csv(full_data, '../Data/key.csv')
+```

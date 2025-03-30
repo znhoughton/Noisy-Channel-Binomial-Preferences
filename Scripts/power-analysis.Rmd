@@ -1,0 +1,462 @@
+---
+title: "power-analysis"
+author: "Zachary Houghton"
+date: "2025-01-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(brms)
+library(MASS)  # For mvrnorm()
+```
+
+# Power Analysis
+
+In this markdown we'll demonstrate a power analysis for an experiment that is examining whether the less frequent form of a binomial primes the more frequent form of the binomial even more than it does the less frequent form of the binomial.
+
+The details can be found in [link paper and pre-registration].
+
+Here is the data scheme and task. Each participant took part of a self-paced reading task with a prime sentence and a target sentence.
+
+For each row in our data we have:
+
+-   residual reading time/rt (dv)
+
+-   prime_freq: whether the prime was for the not-frequent ordering of the binomial or whether it was unrelated
+
+-   target_freq: whether the target sentence that the participant was reading contained the frequent or not-frequent ordering of the binomial
+
+The hypothesis was that due to noisy-channel processing *butter and bread* may speed up the processing of *bread and butter* even faster than it speeds up the processing of *butter and bread.* In other words, the speed up of the not-frequent prime may be larger for the frequent target than the not-frequent target.
+
+Let's jump into the power analysis. We are generating data assuming the following hierarchical structure:
+
+rt = (b0 + b0j + b0k) + (b1 + b1j + b1k) \* prime_freq + (b2 + b2j + b2k) \* target_freq + (b3 + b3j + b3k) \* (prime_freq \* target_freq) + epsiloni )
+
+$$
+rt \sim (\beta_0 + \beta_{0j} + \beta_{0k}) + (\beta_1 + \beta_{1j} + \beta_{1k}) \times prime\_freq + (\beta_2 + \beta_{2j} + \beta_{2k}) \times target\_freq + (\beta_1 + \beta_{1j} + \beta_{1k}) \times (prime\_freq * target\_freq) + \epsilon_i
+$$
+
+A pretty standard setup for psycholinguistics. We are also going to treatment code our variables such that the unrelated prime is 0 and the not-frequent prime is 1, and the not-frequent target is 0 and the frequent target is 1. This way we can focus on whether the interaction effect is less than zero.
+
+## Data Generation
+
+First let's load our data:
+
+```{r}
+data = read_csv('../Data/data_for_power.csv') %>% #pilot data
+  dplyr::select('Item', 'prime_freq', 'target_freq')
+head(data,3)
+```
+
+I ran a pilot version of this experiment and ran a Bayesian mixed-effects model to get each of these values. If I hadn't, I would have used values from a similar study in the literature. However, I prefer to pilot an experiment and get estimates that way, it feels more elegant.
+
+First let's get the coefficient estimates and the subject-level sd and correlations for each term. Notice that there are 4 terms, so there are 6 different correlations (4 choose 2).
+
+```{r}
+
+b0 = -49.54 #Intercept
+b1 = -7.46 #prime
+b2 = -4.79 #target
+b3 = -4.42 #interaction
+
+#standard deviations from pilot data
+#these are our subject-level effects 
+sd_b0j = 115  #Intercept
+sd_b1j = 17   #Prime Frequency
+sd_b2j = 30  #Target Frequency
+sd_b3j = 25  #Interaction (Prime*Target)
+
+#correlations from pilot brms model
+cor_b0j_b1j = 0.11    #Intercept,Prime Frequency
+cor_b0j_b2j = -0.29   #Intercept,Target Frequency
+cor_b0j_b3j = -0.15   #Intercept,prime:target
+cor_b1j_b2j = -0.02    #Prime Frequency,Target Frequency
+cor_b1j_b3j = -0.05   #Prime Frequency,Interaction
+cor_b2j_b3j = 0.06    #Target Frequency,Interaction
+
+```
+
+The next part can be a bit tricky. We need to create a covariance-variance matrix because when we generate our subject-level random effects, we're going to sample them from a multivariate distribution with correlations between our random-effects and correlations between the intercepts and slopes. We can do this by remembering a bit about the structure of covariance-variance matrices.
+
+There are two important points:
+
+First, the covariance of two coefficients is equal to the correlation between the two, times the standard deviation of each. In more mathematical terms:
+
+$$
+cov(x,y) = cor(x,y) \times sd(x) \times sd(y)
+$$
+
+Second, recall that covariance-variance matrices follow the following format:
+
+$$
+\begin{bmatrix}
+\text{Var}(x_1) & \cdots & \text{Cov}(x_1, x_n) \\
+\vdots & \ddots & \vdots \\
+\text{Cov}(x_n, x_1) & \cdots & \text{Var}(x_n)
+\end{bmatrix}
+$$
+
+Once we recognize these two points, it becomes clear that we have all the information already to make the matrix. After this we can just sample from a multivariate distribution using it.
+
+Our initial dataset will assume 25 participants.
+
+```{r}
+#variance-covariance matrix for subjects
+#this part can be a bit tricky to follow
+subject_varcov = matrix(c(
+#here's the format:
+  #Var(x1) ... Cov(x1,xn)
+  #cov(xn,x1) ... var(xn)
+  #we do this for both items and subjects
+  
+  sd_b0j^2,  cor_b0j_b1j * sd_b0j * sd_b1j,  cor_b0j_b2j * sd_b0j * sd_b2j,  cor_b0j_b3j * sd_b0j * sd_b3j,
+  cor_b0j_b1j * sd_b0j * sd_b1j,  sd_b1j^2,  cor_b1j_b2j * sd_b1j * sd_b2j,  cor_b1j_b3j * sd_b1j * sd_b3j,
+  cor_b0j_b2j * sd_b0j * sd_b2j,  cor_b1j_b2j * sd_b1j * sd_b2j,  sd_b2j^2,  cor_b2j_b3j * sd_b2j * sd_b3j,
+  cor_b0j_b3j * sd_b0j * sd_b3j,  cor_b1j_b3j * sd_b1j * sd_b3j,  cor_b2j_b3j * sd_b2j * sd_b3j,  sd_b3j^2
+), nrow = 4, byrow = TRUE)
+
+#correlated subject effects
+n_subjects = 25 #we'll change this number to see how many subjects we need
+subject_effects = mvrnorm(n_subjects, mu = c(0, 0, 0, 0), Sigma = subject_varcov)
+
+# Assign each column to corresponding effect
+b0j = subject_effects[,1]  # Subject-specific intercepts
+b1j = subject_effects[,2]  # Subject-specific prime_freq slopes
+b2j = subject_effects[,3]  # Subject-specific target_freq slopes
+b3j = subject_effects[,4]  # Subject-specific interaction slopes
+noise_sd = 241
+```
+
+Next we can do the same for items:
+
+```{r}
+#Item level effects
+#standard deviations from pilot data
+sd_b0k = 25  #Intercept
+sd_b1k = 17  #Prime Frequency
+sd_b2k = 25  #Target Frequency
+sd_b3k = 23  #Interaction (Prime*Target)
+
+#correlations for items
+cor_b0k_b1k = -0.16   # Intercept,Prime 
+cor_b0k_b2k = -0.12   # Intercept,Target 
+cor_b0k_b3k = -0.13   # Intercept,Interaction
+cor_b1k_b2k =  -0.00   # Prime,Target
+cor_b1k_b3k = 0.02   # Prime,Prime:target
+cor_b2k_b3k = -0.01   # Target,prime:target
+
+# Create variance-covariance matrix for items
+item_varcov = matrix(c(
+  sd_b0k^2,  cor_b0k_b1k * sd_b0k * sd_b1k,  cor_b0k_b2k * sd_b0k * sd_b2k,  cor_b0k_b3k * sd_b0k * sd_b3k,
+  cor_b0k_b1k * sd_b0k * sd_b1k,  sd_b1k^2,  cor_b1k_b2k * sd_b1k * sd_b2k,  cor_b1k_b3k * sd_b1k * sd_b3k,
+  cor_b0k_b2k * sd_b0k * sd_b2k,  cor_b1k_b2k * sd_b1k * sd_b2k,  sd_b2k^2,  cor_b2k_b3k * sd_b2k * sd_b3k,
+  cor_b0k_b3k * sd_b0k * sd_b3k,  cor_b1k_b3k * sd_b1k * sd_b3k,  cor_b2k_b3k * sd_b2k * sd_b3k,  sd_b3k^2
+), nrow = 4, byrow = TRUE)
+
+# Simulate correlated item effects
+n_items = length(data$Item)
+item_effects = mvrnorm(n_items, mu = c(0, 0, 0, 0), Sigma = item_varcov)
+
+# Assign each column to corresponding effect
+b0k = item_effects[,1]  # Item-specific intercepts
+b1k = item_effects[,2]  # Item-specific prime_freq slopes
+b2k = item_effects[,3]  # Item-specific target_freq slopes
+b3k = item_effects[,4]  # Item-specific interaction slopes
+```
+
+And finally we generate our data:
+
+```{r}
+n = n_subjects  # Number of subjects
+
+d = tibble(
+  subject = rep(1:n, each = n_items),
+  item = rep(1:n_items, times = n)
+) %>%
+  mutate(
+    # Assign subject and item effects
+    b0j = rep(b0j, each = n_items),
+    b1j = rep(b1j, each = n_items),
+    b2j = rep(b2j, each = n_items),
+    b3j = rep(b3j, each = n_items),
+    b0k = rep(b0k, times = n),
+    b1k = rep(b1k, times = n),
+    b2k = rep(b2k, times = n),
+    b3k = rep(b3k, times = n),
+    
+    # Error term
+    epsiloni = rnorm(n * n_items, mean = 0, sd = noise_sd),
+    
+    # Condition coding
+    prime_freq = rep(ifelse(data$prime_freq == 'unrelated', 0, 1), times = n),
+    target_freq = rep(ifelse(data$target_freq == 'not-frequent', 0, 1), times = n),
+    
+    # Response time computation
+    rt = (b0 + b0j + b0k) + 
+         (b1 + b1j + b1k) * prime_freq + 
+         (b2 + b2j + b2k) * target_freq + 
+         (b3 + b3j + b3k) * (prime_freq * target_freq) + 
+         epsiloni
+  )
+
+
+d$subject = factor(d$subject)
+d$item = factor(d$item)
+d$target_freq = factor(d$target_freq)
+d$prime_freq = factor(d$prime_freq)
+```
+
+## Power Simulations
+
+Now we use our previous data generation process and we put it into a function.
+
+```{r}
+sim_d = function(seed, n) {
+  
+  set.seed(seed)
+  
+  n_subjects = n
+
+  
+  b0 = -34 #Intercept
+  b1 = -15 #prime
+  b2 = -6 #target
+  b3 = -12 #interaction
+
+  #standard deviations from pilot data
+  #these are our subject-level effects 
+  b0j = 33  #Intercept
+  b1j = 10   #Prime Frequency
+  b2j = 10  #Target Frequency
+  b3j = 10  #Interaction (Prime*Target)
+
+  
+  #standard deviations from pilot data
+  #these are our subject-level effects 
+  sd_b0j = 33  #Intercept
+  sd_b1j = 10   #Prime Frequency
+  sd_b2j = 10  #Target Frequency
+  sd_b3j = 10  #Interaction (Prime*Target)
+  
+  #correlations from pilot brms model
+  cor_b0j_b1j = 0.11    #Intercept,Prime Frequency
+  cor_b0j_b2j = -0.29   #Intercept,Target Frequency
+  cor_b0j_b3j = -0.15   #Intercept,prime:target
+  cor_b1j_b2j = -0.02    #Prime Frequency,Target Frequency
+  cor_b1j_b3j = -0.05   #Prime Frequency,Interaction
+  cor_b2j_b3j = 0.06    #Target Frequency,Interaction
+  
+  #variance-covariance matrix for subjects
+  #this part was hard lol
+  subject_varcov = matrix(c(
+  #here's the format:
+    #Var(x1) ... Cov(x1,xn)
+    #cov(xn,x1) ... var(xn)
+    #we do this for both items and subjects
+    
+    sd_b0j^2,  cor_b0j_b1j * sd_b0j * sd_b1j,  cor_b0j_b2j * sd_b0j * sd_b2j,  cor_b0j_b3j * sd_b0j * sd_b3j,
+    cor_b0j_b1j * sd_b0j * sd_b1j,  sd_b1j^2,  cor_b1j_b2j * sd_b1j * sd_b2j,  cor_b1j_b3j * sd_b1j * sd_b3j,
+    cor_b0j_b2j * sd_b0j * sd_b2j,  cor_b1j_b2j * sd_b1j * sd_b2j,  sd_b2j^2,  cor_b2j_b3j * sd_b2j * sd_b3j,
+    cor_b0j_b3j * sd_b0j * sd_b3j,  cor_b1j_b3j * sd_b1j * sd_b3j,  cor_b2j_b3j * sd_b2j * sd_b3j,  sd_b3j^2
+  ), nrow = 4, byrow = TRUE)
+  all(subject_varcov == t(subject_varcov)) # check that it's a valid variance-covariance matrix
+  #correlated subject effects
+
+  subject_effects = mvrnorm(n_subjects, mu = c(0, 0, 0, 0), Sigma = subject_varcov)
+  
+  # Assign each column to corresponding effect
+  b0j = subject_effects[,1]  # Subject-specific intercepts
+  b1j = subject_effects[,2]  # Subject-specific prime_freq slopes
+  b2j = subject_effects[,3]  # Subject-specific target_freq slopes
+  b3j = subject_effects[,4]  # Subject-specific interaction slopes
+  
+  noise_sd = 100
+  
+  #Item level effects
+  #standard deviations from pilot data
+  sd_b0k = 9  #Intercept
+  sd_b1k = 10  #Prime Frequency
+  sd_b2k = 10  #Target Frequency
+  sd_b3k = 10  #Interaction (Prime*Target)
+  
+  #correlations for items
+  cor_b0k_b1k = -0.16   # Intercept,Prime 
+  cor_b0k_b2k = -0.12   # Intercept,Target 
+  cor_b0k_b3k = -0.13   # Intercept,Interaction
+  cor_b1k_b2k =  -0.00   # Prime,Target
+  cor_b1k_b3k = 0.02   # Prime,Prime:target
+  cor_b2k_b3k = -0.01   # Target,prime:target
+  
+  # Create variance-covariance matrix for items
+  item_varcov = matrix(c(
+    sd_b0k^2,  cor_b0k_b1k * sd_b0k * sd_b1k,  cor_b0k_b2k * sd_b0k * sd_b2k,  cor_b0k_b3k * sd_b0k * sd_b3k,
+    cor_b0k_b1k * sd_b0k * sd_b1k,  sd_b1k^2,  cor_b1k_b2k * sd_b1k * sd_b2k,  cor_b1k_b3k * sd_b1k * sd_b3k,
+    cor_b0k_b2k * sd_b0k * sd_b2k,  cor_b1k_b2k * sd_b1k * sd_b2k,  sd_b2k^2,  cor_b2k_b3k * sd_b2k * sd_b3k,
+    cor_b0k_b3k * sd_b0k * sd_b3k,  cor_b1k_b3k * sd_b1k * sd_b3k,  cor_b2k_b3k * sd_b2k * sd_b3k,  sd_b3k^2
+  ), nrow = 4, byrow = TRUE)
+  #all(item_varcov == t(item_varcov)) # check that it's a valid variance-covariance matrix
+  # Simulate correlated item effects
+  n_items = length(data$Item)
+  item_effects = mvrnorm(n_items, mu = c(0, 0, 0, 0), Sigma = item_varcov)
+  
+  # Assign each column to corresponding effect
+  b0k = item_effects[,1]  # Item-specific intercepts
+  b1k = item_effects[,2]  # Item-specific prime_freq slopes
+  b2k = item_effects[,3]  # Item-specific target_freq slopes
+  b3k = item_effects[,4]  # Item-specific interaction slopes
+  
+  d = tibble(
+    subject = rep(1:n, each = n_items),
+    item = rep(1:n_items, times = n)
+  ) %>%
+    mutate(
+      # Assign subject and item effects
+      b0j = rep(b0j, each = n_items),
+      b1j = rep(b1j, each = n_items),
+      b2j = rep(b2j, each = n_items),
+      b3j = rep(b3j, each = n_items),
+      b0k = rep(b0k, times = n),
+      b1k = rep(b1k, times = n),
+      b2k = rep(b2k, times = n),
+      b3k = rep(b3k, times = n),
+      
+      # Error term
+      epsiloni = rnorm(n * n_items, mean = 0, sd = noise_sd),
+      
+      # Condition coding
+      prime_freq = rep(ifelse(data$prime_freq == 'unrelated', 0, 1), times = n),
+      target_freq = rep(ifelse(data$target_freq == 'not-frequent', 0, 1), times = n),
+      
+      # Response time computation
+      rt = (b0 + b0j + b0k) + 
+           (b1 + b1j + b1k) * prime_freq + 
+           (b2 + b2j + b2k) * target_freq + 
+           (b3 + b3j + b3k) * (prime_freq * target_freq) + 
+           epsiloni
+    )
+  
+  
+  d$subject = factor(d$subject)
+  d$item = factor(d$item)
+  d$target_freq = factor(d$target_freq)
+  d$prime_freq = factor(d$prime_freq)
+  
+ d = d #so that d is returned
+}
+
+```
+
+Next we fit a single model. We do this so that we can use brms update() function to hopefully reduce some of the compilation time.
+
+```{r}
+
+## first model
+t1 = Sys.time()
+fit = 
+  brm(data = d, cores = 4, chains = 4, iter = 6000, warmup = 3000,
+      rt ~ 0 + Intercept + prime_freq*target_freq + 
+        (prime_freq*target_freq|subject) + 
+        (prime_freq*target_freq|item),
+      #control = list(adapt_delta = 0.95),
+      prior = c(set_prior("student_t(3, 0, 10)", class = "b"),
+                set_prior("student_t(3, 0, 24.32)", class = "sd")), #from our model estimate
+      seed = 465) #random seed
+t2 = Sys.time()
+t2 - t1 #11mins / 15.6mins'
+
+```
+
+Now we'll use a bit of tidyverse magic to run the same model across different generated data without having to compile the model over and over again. Courtesy of: <https://solomonkurz.netlify.app/blog/bayesian-power-analysis-part-i/>
+
+We'll re-run the same model with 50 participants.
+
+```{r}
+
+n_sim = 100 #set to 2 initially for debugging
+
+t1 = Sys.time()
+
+s = #n = 100: power of 0.33
+  tibble(seed = 1:n_sim) %>% 
+  mutate(d = map(seed, sim_d, n = 500)) %>% #what about 100 participants?
+  mutate(fit = map2(d, seed, ~update(fit, newdata = .x, seed = .y, cores = 4, chains = 4)))
+
+t2 <- Sys.time()
+
+t2 - t1
+```
+
+Notice how we don't have to re-compile the model. This saves us a ton of time. Though even just to run those two simulations, it took a `r t2 - t1`. So running 1000 simulations would take upwards of 33 hours. Not great, but I'm fortunate enough to be able to use university resources to run 1000 simulations. I'd probably only run 100 simulations if I didn't have a cpu cluster.
+
+Finally we try different numbers of subjects to determine how many subjects we need.
+
+```{r}
+# compute power
+n_sim = 100
+n_subjs = 250
+
+s = #n = 50, b0 = -20, b1 = 0: power of 0.33
+  tibble(seed = 1:n_sim) %>% 
+  mutate(d = map(seed, sim_d, n = n_subjs)) %>% 
+  mutate(fit = map2(d, seed, ~update(fit, newdata = .x, seed = .y, 
+                                     chains = 4, cores = 4, iter = 4000, warmup = 2000)))
+
+```
+
+Now we can compute the proportion of models where the coefficient estimate credible intervals for our three effects of interest were less than zero. If I expected the effect to be positive we would look at whether the 2.5% interval was greater than zero instead.
+
+```{r}
+#summary statistics for fixed effects from each model
+s = s %>%
+  mutate(
+    summary = map(fit, ~as.data.frame(fixef(.x, probs = c(0.025, 0.975)))), #Extract fixed effects
+    prime_freq_check = map_lgl(summary, ~.x["prime_freq1", "Q97.5"] < 0), #Check if upper CI bound is < 0 for "prime_freq"
+    target_freq_check = map_lgl(summary, ~.x["target_freq1", "Q97.5"] < 0),
+    prime_target_check = map_lgl(summary, ~.x["prime_freq1:target_freq1", "Q97.5"] < 0),
+    prime_freq = map_dbl(summary, ~.x["prime_freq1", "Estimate"]),
+    target_freq = map_dbl(summary, ~.x["target_freq1", "Estimate"]),
+    prime_target_freq = map_dbl(summary, ~.x["prime_freq1:target_freq1", "Estimate"]),
+    prime_freq_2.5 = map_dbl(summary, ~.x["prime_freq1", "Q2.5"]),
+    target_2.5 = map_dbl(summary, ~.x["target_freq1", "Q2.5"]),
+    prime_target_2.5 = map_dbl(summary, ~.x["prime_freq1:target_freq1", "Q2.5"]),
+    prime_freq_97.5 = map_dbl(summary, ~.x["prime_freq1", "Q97.5"]),
+    target_97.5 = map_dbl(summary, ~.x["target_freq1", "Q97.5"]),
+    prime_target_97.5 = map_dbl(summary, ~.x["prime_freq1:target_freq1", "Q97.5"])
+  )
+
+#proportion of models where "prime_freq" CI upper bound is < 0
+prime_freq_below_zero = mean(s$prime_freq_check)
+target_freq_below_zero = mean(s$target_freq_check)
+prime_target_below_zero = mean(s$prime_target_check)
+
+prime_2.5 = mean(s$prime_freq_2.5)
+target_2.5 = mean(s$target_2.5)
+prime_target_2.5 = mean(s$prime_target_2.5)
+
+prime_97.5 = mean(s$prime_freq_97.5)
+target_97.5 = mean(s$target_97.5)
+prime_target_97.5 = mean(s$prime_target_97.5)
+
+prime_est = mean(s$prime_freq)
+target_est = mean(s$target_freq)
+prime_target_est = mean(s$prime_target_freq)
+
+prime_freq_below_zero
+target_freq_below_zero
+prime_target_below_zero
+
+prime_2.5 
+target_2.5
+prime_target_2.5
+
+prime_97.5
+target_97.5
+prime_target_97.5
+```
+
+```{r}
+
+```

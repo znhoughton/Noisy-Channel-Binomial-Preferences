@@ -1,0 +1,101 @@
+Item,Binomial (Alphabetical),WordA,WordB,Questions,Answer,SentenceType,Target Sentence,PrimeType,Prime,Filename Prime,condition
+100,NA,NA,NA,Were the mountains covered in Mist?,y,Filler,"The mountains loomed in the distance, covered in mist and mystery.",NA,"She walked along the shore, collecting seashells in her hands.",placeholder,Filler
+101,NA,NA,NA,Did she wander the aisles with her friends?,n,Filler,She spent hours wandering the aisles of the bookstore alone.,NA,The sound of distant thunder warned of a coming storm.,placeholder,Filler
+102,NA,NA,NA,Did he feel like someone was watching him?,y,Filler,He couldn't shake the feeling that someone was watching him.,NA,He kept his grandmother's letters in a box under his bed.,placeholder,Filler
+103,NA,NA,NA,Was there heavy rain?,n,Filler,"A soft drizzle began to fall, dampening the crowded streets.",NA,"The forest was dense and mysterious, filled with ancient trees.",placeholder,Filler
+104,NA,NA,NA,Did she pick wildflowers?,y,Filler,She picked wildflowers and placed them gently in her hair.,NA,She carefully folded the letter and placed it in an envelope.,placeholder,Filler
+105,NA,NA,NA,Did the leaves swirl across a busy road?,n,Filler,"The leaves swirled in the breeze, dancing across the empty road.",NA,"The bookstore was quiet, filled with the scent of old paper.",placeholder,Filler
+106,NA,NA,NA,Was there chaos around him?,y,Filler,He felt a strange sense of calm despite the chaos around him.,NA,He wrote his ideas on scraps of paper scattered on the desk.,placeholder,Filler
+107,NA,NA,NA,Were the books clean?,n,Filler,The old library was filled with dust-covered books and secrets.,NA,She watched as the sun dipped below the distant horizon.,placeholder,Filler
+108,NA,NA,NA,Was there laughter coming from the next room?,y,Filler,She could hear faint laughter coming from the next room.,NA,The rain pattered softly on the roof as they sat in silence.,placeholder,Filler
+109,NA,NA,NA,Did he toss a pebble into the ocean?,n,Filler,"He tossed a pebble into the lake, watching the ripples spread.",NA,He felt a chill run down his spine as he entered the room.,placeholder,Filler
+110,NA,NA,NA,Was there sand between her toes?,y,Filler,She felt the sand between her toes as she walked along the shore.,NA,The fresh scent of pine filled the air as she hiked uphill.,placeholder,Filler
+111,NA,NA,NA,Was the room noisy?,n,Filler,The room was silent except for the ticking of an old clock.,NA,She loved the feel of the ocean breeze against her face.,placeholder,Filler
+112,NA,NA,NA,Was his jacket faded?,y,Filler,He wore a faded blue jacket that had seen better days.,NA,"A gentle breeze rustled the leaves, filling the silence.",placeholder,Filler
+113,NA,NA,NA,Was the letter on her table?,n,Filler,She found an old letter hidden inside the back of a drawer.,NA,"He sipped his coffee slowly, watching people pass by.",placeholder,Filler
+114,NA,NA,NA,Was there coffee in the cafe?,y,Filler,The cafe smelled of freshly baked bread and roasted coffee.,NA,"The beach was empty, save for a few scattered seashells.",placeholder,Filler
+115,NA,NA,NA,Was the map new?,n,Filler,He traced his fingers along the edges of the ancient map.,NA,She painted flowers in vibrant colors across the canvas.,placeholder,Filler
+116,NA,NA,NA,Did listen to the birds singing?,y,Filler,"She paused, listening to the faint sounds of birds singing.",NA,"The city lights sparkled, reflecting off the wet streets.",placeholder,Filler
+117,NA,NA,NA,Did the sky turn shades of purple?,n,Filler,The sky turned shades of pink and orange as the sun set.,NA,"He admired the stars, feeling a deep sense of wonder.",placeholder,Filler
+118,NA,NA,NA,Did he watch old films?,y,Filler,He spent his evening watching old black-and-white films.,NA,She wore a necklace with a delicate silver pendant.,placeholder,Filler
+119,NA,NA,NA,Was the sidewalk well-lit?,n,Filler,"The streetlights flickered, casting shadows on the sidewalk.",NA,"The children ran across the field, laughing and shouting.",placeholder,Filler
+120,NA,NA,NA,Did she whisper secrets to the stars?,y,Filler,"She whispered secrets to the stars, her voice barely audible.",NA,"The lake was like glass, perfectly reflecting the sky.",placeholder,Filler
+121,NA,NA,NA,Was he stressed out?,n,Filler,He found comfort in the familiar hum of the city at night.,NA,She made a wish on the first star she saw that night.,placeholder,Filler
+122,NA,NA,NA,Did the waves crash against the rocks?,y,Filler,The waves crashed against the rocks with a steady rhythm.,NA,He traced his fingers along the ancient stone carvings.,placeholder,Filler
+123,NA,NA,NA,Was the sand dry?,n,Filler,She left footprints in the wet sand that soon disappeared.,NA,The soft glow of the candle illuminated her face.,placeholder,Filler
+124,NA,NA,NA,Did the scent of pine trees fill the air?,y,Filler,The scent of pine trees filled the air in the quiet forest.,NA,"She watched the river flow gently, lost in thought.",placeholder,Filler
+125,NA,NA,NA,Did he know what he wanted to paint?,n,Filler,"He stared at the blank canvas, unsure of what to paint.",NA,The old piano played a haunting melody in the empty hall.,placeholder,Filler
+126,NA,NA,NA,Did she keep a journal?,y,Filler,She kept a journal filled with her thoughts and dreams.,NA,"He sat on the rooftop, admiring the city lights below.",placeholder,Filler
+127,NA,NA,NA,Did the lights flicker?,n,Filler,"The candlelight flickered, casting shadows on the walls.",NA,The bookstore was filled with stacks of dusty old novels.,placeholder,Filler
+128,NA,NA,NA,Did he find an old photo album?,y,Filler,He found an old photo album filled with forgotten memories.,NA,"She found a small, faded photo tucked inside a book.",placeholder,Filler
+129,NA,NA,NA,Was it sunny outside?,n,Filler,She watched the raindrops slide down the windowpane.,NA,The garden was alive with the buzzing of bees and birds.,placeholder,Filler
+130,NA,NA,NA,Were there many different-colored flowers in the garden?,y,Filler,The garden was filled with flowers of every color imaginable.,NA,"He walked down the quiet street, hands in his pockets.",placeholder,Filler
+131,NA,NA,NA,Did he expect the gust of wind?,n,Filler,He felt a sudden gust of wind as he stepped outside.,NA,She braided her hair while listening to the birds singing.,placeholder,Filler
+132,NA,NA,NA,Was the evening getting colder?,y,Filler,She wrapped her scarf tighter as the evening grew colder.,NA,The waves crashed rhythmically against the rocky shore.,placeholder,Filler
+133,NA,NA,NA,Were they still there?,n,Filler,The echo of laughter lingered long after they had left.,NA,A faint scent of lavender filled the cozy little room.,placeholder,Filler
+134,NA,NA,NA,Did he like the watch?,y,Filler,He admired the intricate design on the vintage watch.,NA,The stars were unusually bright on that clear night.,placeholder,Filler
+135,NA,NA,NA,Was the street loud?,n,Filler,"The street was silent, save for the occasional car passing.",NA,She tucked a flower behind her ear and smiled softly.,placeholder,Filler
+136,NA,NA,NA,Did she run her fingers through the rose?,y,Filler,She ran her fingers through the soft petals of a rose.,NA,"The mountain air was crisp, carrying the scent of pine.",placeholder,Filler
+137,NA,NA,NA,Was it clear outside?,n,Filler,"He watched as the fog rolled in, covering everything in white.",NA,He felt a sense of nostalgia as he entered his old room.,placeholder,Filler
+138,NA,NA,NA,Was it bright in the room?,y,Filler,"The fire crackled, filling the room with warmth and light.",NA,She watched as the fog rolled over the hills silently.,placeholder,Filler
+139,NA,NA,NA,Was the seashell strong?,n,Filler,"She held the fragile seashell, admiring its unique pattern.",NA,"The campfire crackled, casting shadows on their faces.",placeholder,Filler
+140,NA,NA,NA,Did he talk a deep breath?,y,Filler,"He took a deep breath, savoring the fresh scent of rain.",NA,He whistled a cheerful tune as he walked down the path.,placeholder,Filler
+141,NA,NA,NA,Did the new watch chime?,n,Filler,"The old clock chimed, signaling the hour with a soft ring.",NA,She wore a vibrant scarf that stood out in the crowd.,placeholder,Filler
+142,NA,NA,NA,Did she laugh?,y,Filler,She laughed as she splashed through puddles on the street.,NA,The sound of waves crashing was soothing to her soul.,placeholder,Filler
+143,NA,NA,NA,Was the sky dark?,n,Filler,"The sky was painted with stars, each one twinkling brightly.",NA,"The night sky was clear, dotted with countless stars.",placeholder,Filler
+144,NA,NA,NA,Did he admire the view?,y,Filler,"He admired the view from the hilltop, feeling at peace.",NA,She found a feather and placed it gently in her book.,placeholder,Filler
+145,NA,NA,NA,DId she trace the shapes in the dirt?,n,Filler,She traced shapes in the sand with her finger absentmindedly.,NA,"The park was empty, covered in a blanket of fallen leaves.",placeholder,Filler
+146,NA,NA,NA,Did the city lights glow?,y,Filler,"The city lights glowed, creating a warm and cozy atmosphere.",NA,He admired the intricate patterns on the vintage clock.,placeholder,Filler
+147,NA,NA,NA,Did he jot down the notes on his computer?,n,Filler,"He jotted down notes in his notebook, deep in thought.",NA,The old house was filled with memories of past years.,placeholder,Filler
+148,NA,NA,NA,Was the bakery small?,y,Filler,The small bakery was filled with the scent of cinnamon rolls.,NA,She watched the fireflies dance in the warm evening air.,placeholder,Filler
+149,NA,NA,NA,Did she watch the blue sky?,n,Filler,She watched as leaves drifted lazily down from the trees.,NA,He spent hours searching for the perfect skipping stone.,placeholder,Filler
+150,NA,NA,NA,Was the sun rising?,y,Filler,"The children laughed, chasing each other around the playground.",NA,The sunrise painted the sky with shades of pink and orange.,placeholder,Filler
+151,NA,NA,NA,Did she notice a bird?,n,Filler,He watched as a flock of birds took off into the sky.,NA,She noticed a butterfly resting on a nearby flower.,placeholder,Filler
+152,NA,NA,NA,Was the river calm?,y,Filler,"The lake was calm, reflecting the trees and sky perfectly.",NA,"The river was calm, reflecting the trees along its bank.",placeholder,Filler
+153,NA,NA,NA,Did he enjoy the noisy city?,n,Filler,"She sipped her tea slowly, enjoying the warmth it brought.",NA,He enjoyed the quiet solitude of the early morning.,placeholder,Filler
+154,NA,NA,NA,Did she enjoy the mountain air?,y,Filler,The sound of waves crashing was soothing and rhythmic.,NA,"She took a deep breath, savoring the fresh mountain air.",placeholder,Filler
+155,NA,NA,NA,Was the sky dark?,n,Filler,"He looked up, noticing the clouds beginning to part.",NA,The clouds drifted lazily across the bright blue sky.,placeholder,Filler
+156,NA,NA,NA,Did he collect smooth stones?,y,Filler,"The street was busy, filled with people going about their day.",NA,He collected smooth stones along the riverbank.,placeholder,Filler
+157,NA,NA,NA,Was the village loud?,n,Filler,She found a four-leaf clover in the field and smiled.,NA,"The village was quiet, with only the sound of birds.",placeholder,Filler
+158,NA,NA,NA,Did she close her eyes?,y,Filler,"The air smelled like rain, fresh and earthy after the storm.",NA,"She closed her eyes, feeling the warmth of the sun.",placeholder,Filler
+159,NA,NA,NA,Was the building modern?,n,Filler,"He counted the stars, trying to remember their constellations.",NA,He felt the weight of history in the ancient building.,placeholder,Filler
+160,NA,NA,NA,Was the evening breeze gentle?,y,Filler,She wore a bright yellow dress that caught everyone's eye.,NA,The leaves rustled softly in the gentle evening breeze.,placeholder,Filler
+161,NA,NA,NA,Was she reckless?,n,Filler,"The cat stretched lazily, basking in a patch of sunlight.",NA,She carefully arranged flowers in a small glass vase.,placeholder,Filler
+162,NA,NA,NA,Was the room warm?,y,Filler,He felt a strange sense of déjà vu as he entered the room.,NA,"The fire crackled, casting a warm glow over the room.",placeholder,Filler
+163,NA,NA,NA,Was he watching the house?,n,Filler,The city skyline was breathtaking against the evening sky.,NA,"He looked out at the waves, lost in his thoughts.",placeholder,Filler
+164,NA,NA,NA,Did the children build sandcastles?,y,Filler,She watched as raindrops formed patterns on the window.,NA,The children built sandcastles by the edge of the water.,placeholder,Filler
+165,NA,NA,NA,Did she paint the ocean?,n,Filler,"The snow blanketed the town, creating a peaceful stillness.",NA,She painted the sunset with bold strokes of orange and red.,placeholder,Filler
+166,NA,NA,NA,Was the beach empty?,y,Filler,"He opened the old book, its pages yellowed with age.",NA,The sound of laughter echoed across the empty beach.,placeholder,Filler
+167,NA,NA,NA,Did he sit in the cold?,n,Filler,The fireflies danced around them in the warm summer night.,NA,"He sat by the fire, wrapped in a thick woolen blanket.",placeholder,Filler
+168,NA,NA,NA,Was the garden overgrown?,y,Filler,She marveled at the intricate patterns on the butterfly's wings.,NA,"The garden was overgrown, filled with wildflowers and weeds.",placeholder,Filler
+169,NA,NA,NA,Was the ladybug in her house?,n,Filler,The street musician played a hauntingly beautiful melody.,NA,She watched a ladybug crawl along the edge of a leaf.,placeholder,Filler
+170,NA,NA,NA,Were clouds gathering in the sky?,y,Filler,"He took a photo of the mountains, capturing their majesty.",NA,The sky darkened as clouds gathered on the horizon.,placeholder,Filler
+171,NA,NA,NA,Did he admire the sunrise?,n,Filler,She felt the cool breeze brush against her skin softly.,NA,He admired the sunset from the top of the hill.,placeholder,Filler
+172,NA,NA,NA,Was the room filled with light?,y,Filler,The children played with a sense of freedom and joy.,NA,"The room was filled with a soft, golden afternoon light.",placeholder,Filler
+173,NA,NA,NA,Did she swim through the ocean?,n,Filler,He waited patiently as the storm passed overhead.,NA,"She walked through the field, admiring the wildflowers.",placeholder,Filler
+174,NA,NA,NA,Were the flowers blooming?,y,Filler,The old photograph reminded her of distant memories.,NA,The air was filled with the sweet scent of blooming flowers.,placeholder,Filler
+175,NA,NA,NA,Did he read aloud?,n,Filler,"She walked through the meadow, admiring the wildflowers.",NA,"He read quietly by the window, bathed in soft light.",placeholder,Filler
+176,NA,NA,NA,Was it night time?,y,Filler,The sun was just beginning to peek over the horizon.,NA,The moon reflected on the calm surface of the lake.,placeholder,Filler
+177,NA,NA,NA,Did she write her dreams in her computer?,n,Filler,"He watched the sunrise, feeling a sense of new beginnings.",NA,She wrote her dreams in a small leather-bound journal.,placeholder,Filler
+178,NA,NA,NA,Was the bakery cozy?,y,Filler,The city lights reflected on the wet streets after the rain.,NA,The scent of fresh bread filled the cozy little bakery.,placeholder,Filler
+179,NA,NA,NA,Was he watching the ocean?,n,Filler,"She gazed at the ocean, lost in her own thoughts.",NA,He watched the clouds drift across the open sky.,placeholder,Filler
+180,NA,NA,NA,Was it raining?,y,Filler,The old rocking chair creaked as he sat down slowly.,NA,She felt a raindrop on her cheek as she looked up.,placeholder,Filler
+181,NA,NA,NA,Was the river dirty?,n,Filler,The library smelled of old paper and wooden shelves.,NA,"The river wound through the valley, clear and sparkling.",placeholder,Filler
+182,NA,NA,NA,Did he hear music?,y,Filler,"She savored each bite, enjoying the rich flavors.",NA,He heard a soft melody playing in the distance.,placeholder,Filler
+183,NA,NA,NA,Was it a cold night?,n,Filler,"The dog barked excitedly, happy to see her return.",NA,The fireflies glowed softly in the warm summer night.,placeholder,Filler
+184,NA,NA,NA,Did she wear a bracelet?,y,Filler,"He picked up a stone, examining its smooth surface.",NA,"She wore a bracelet of small, colorful beads.",placeholder,Filler
+185,NA,NA,NA,Was the sky bright?,n,Filler,The trail led them deep into the heart of the forest.,NA,The lighthouse stood tall against the darkening sky.,placeholder,Filler
+186,NA,NA,NA,Did he watch the fish?,y,Filler,She felt a sense of wonder as she gazed up at the stars.,NA,He watched the fish swim lazily in the pond.,placeholder,Filler
+187,NA,NA,NA,Was the cafe large?,n,Filler,The night air was filled with the scent of blooming flowers.,NA,The scent of coffee filled the air in the tiny cafe.,placeholder,Filler
+188,NA,NA,NA,Did she walk through the garden?,y,Filler,"He glanced at the handwritten note, puzzled by its message.",NA,"She walked through the garden, admiring each flower.",placeholder,Filler
+189,NA,NA,NA,Was it a busy night?,n,Filler,"The small village was quiet, nestled in the valley.",NA,"The night was calm, with only the sound of crickets.",placeholder,Filler
+190,NA,NA,NA,Did he feel peaceful?,y,Filler,She watched as the paper boat floated down the stream.,NA,He felt a sense of peace by the tranquil lake.,placeholder,Filler
+191,NA,NA,NA,Did she watch the airplanes?,n,Filler,The air was thick with the scent of pine and fresh rain.,NA,She watched the kite soar high above the field.,placeholder,Filler
+192,NA,NA,NA,Was the bakery busy?,y,Filler,He tied his shoes and prepared for the long hike ahead.,NA,"The bakery was busy, filled with customers chatting.",placeholder,Filler
+193,NA,NA,NA,Did he watch the sunrise?,n,Filler,"The breeze ruffled her hair, carrying the scent of salt.",NA,"He sat on the bench, watching the sun go down.",placeholder,Filler
+194,NA,NA,NA,Were there many insects in the field?,y,Filler,She painted the sunset with bold strokes of orange and red.,NA,The field was alive with the sound of buzzing insects.,placeholder,Filler
+195,NA,NA,NA,Did she place a rocker in her book?,n,Filler,"The bookstore was cozy, filled with warm lights and books.",NA,She placed a feather in her book as a keepsake.,placeholder,Filler
+196,NA,NA,NA,Did the trees sway?,y,Filler,He watched as the sun disappeared below the horizon.,NA,The trees swayed gently in the evening breeze.,placeholder,Filler
+197,NA,NA,NA,Did he hold a new coin?,n,Filler,"The river flowed gently, reflecting the sky above.",NA,"He held an old, worn coin in his hand thoughtfully.",placeholder,Filler
+198,NA,NA,NA,Was the forest quiet?,y,Filler,She wore a necklace with a tiny silver locket.,NA,The sound of the waterfall filled the quiet forest.,placeholder,Filler
+199,NA,NA,NA,Did she trace her finger along the edges of a book?,n,Filler,"The garden was alive with color, flowers blooming everywhere.",NA,She traced her finger along the edges of the map.,placeholder,Filler
