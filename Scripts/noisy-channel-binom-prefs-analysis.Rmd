@@ -883,3 +883,116 @@ percent_greater_zero
 
 
 ```
+### frequent vs unrelated 
+
+```{r}
+
+mental_rotation_data = data %>% 
+  select(PROLIFIC_PID, Prime, Sentence, angle, right_im, key_resp.corr, audio_loop.thisTrialN, audio_loop.thisIndex, audio_loop.thisN) %>%
+  mutate(Sentence = na_if(Sentence, "")) %>%
+  group_by(PROLIFIC_PID) %>%
+  fill(Sentence, .direction = 'up')
+
+mental_rotation_data = mental_rotation_data %>%
+  group_by(PROLIFIC_PID, Sentence) %>%
+  mutate(trial = audio_loop.thisTrialN) %>%
+  fill(trial, .direction = 'up') 
+
+
+mental_rotation_summary = mental_rotation_data %>%
+  group_by(PROLIFIC_PID, Sentence, trial) %>%
+  summarize(mean_angle = mean(angle, na.rm = T), mean_corr = mean(key_resp.corr, na.rm = T), num_rotations = n())
+```
+
+```{r}
+mental_rotation_summary = mental_rotation_summary %>%
+  rename(participant = PROLIFIC_PID)
+
+data_analysis1_mental_rotation = data_analysis1_freq %>%
+  left_join(mental_rotation_summary, by = c('participant', 'Sentence'))
+
+
+```
+
+```{r}
+data_analysis1_mental_rotation = data_analysis1_mental_rotation %>% 
+  filter(!is.na(List)) %>%
+  filter(target == 1 | spillover == 1) %>%
+  filter(rt > 100 & rt < 5000) %>%
+  filter(OverallAcc > 0.7) %>% #exclude low-accuracy participants
+  group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct, prime_freq, target_freq, AudioAcc, mean_angle, mean_corr, num_rotations) %>%
+  summarize(residual_rts = sum(residual_rts)) %>%
+  ungroup() %>%
+  group_by(participant) %>%
+  mutate(ExpAcc = mean(correct))
+
+sum(data_analysis1_mental_rotation['ExpAcc'] > 0.7)
+
+mean_rts = data_analysis1_mental_rotation %>%
+  ungroup() %>%
+  summarize(mean(residual_rts))
+
+sd_rts = data_analysis1_mental_rotation %>%
+  ungroup() %>%
+  summarize(sd(residual_rts))
+
+lower_bound = as.double(mean_rts[1,1]) - 2.5 * as.double(sd_rts[1,1])
+upper_bound = as.double(mean_rts[1,1]) + 2.5 * as.double(sd_rts[1,1])
+
+data_analysis1_mental_rotation = data_analysis1_mental_rotation %>%
+  filter((residual_rts > lower_bound) & (residual_rts < upper_bound))
+
+  
+
+data_analysis1_mental_rotation$prime_freq = relevel(data_analysis1_mental_rotation$prime_freq, ref = 'unrelated')
+data_analysis1_mental_rotation$target_freq = relevel(data_analysis1_mental_rotation$target_freq, ref = 'frequent')
+
+data_analysis1_mental_rotation$participant = factor(data_analysis1_mental_rotation$participant)
+data_analysis1_mental_rotation$Item = factor(data_analysis1_mental_rotation$Item)
+
+length(unique(data_analysis1_mental_rotation$participant))
+length(unique(data_analysis1_mental_rotation$Item))
+
+rows_per_participant = data_analysis1_mental_rotation %>% #sanity check
+  group_by(participant) %>%
+  summarize(n())
+```
+
+```{r}
+for_plots = na.omit(data_analysis1_mental_rotation)
+plot(for_plots$mean_angle, for_plots$mean_corr)
+```
+
+```{r}
+easy_trials = for_plots %>%
+  filter(mean_angle < 90)
+
+easy_trials_model = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
+          data = easy_trials,
+          iter = 8000, 
+          warmup = 4000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         #control = list(adapt_delta = 0.99),
+         file = 'easy_trials_model_freq' #accuracy_greater_90
+)
+
+fixef(easy_trials_model)
+conditional_effects(easy_trials_model)
+```
+
+```{r}
+percent_greater_zero = data.frame(fixef(easy_trials_model, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+percent_greater_zero
+
+
+
+```
