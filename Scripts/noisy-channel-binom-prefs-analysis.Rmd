@@ -215,6 +215,8 @@ length(unique(data_analysis1$Item))
 
 data_analysis1$prime_freq = factor(data_analysis1$prime_freq, levels = c('unrelated', 'not-frequent'))
 data_analysis1$target_freq = factor(data_analysis1$target_freq, levels = c('not-frequent', 'frequent'))
+
+data_analysis_first_exp = data_analysis1
 ```
 
 ## Analyses
@@ -996,3 +998,635 @@ percent_greater_zero
 
 
 ```
+
+# Pilot Experiment 2
+
+## Loading data
+
+```{r}
+data = read.csv('../Data/data_pilotexp2.csv', quote = "\"")
+
+
+#pilot_data$date = as.Date(pilot_data$date)
+
+data$date = as.Date(data$date)
+# data = pilot_data %>%
+#   filter(date > as.Date("2025-01-24"))
+
+# pilot = pilot_data2 %>%
+#   select('participant', 'Item', 'List', 'Condition', 'WordA', 'WordB', 'Binomial', 'PrimeType', 'Prime', 'Sentence', 'SentenceType', 'Questions', 'Answer', 'key_resp.corr', 'key_resp_4.keys', 'trials.thisN', starts_with("Word")) %>%
+#   filter(!is.na(List)) %>%
+#   mutate(correct = ifelse(`key_resp_4.keys` == Answer, 1, 0)) %>%
+#   group_by(participant) %>%
+#   mutate('OverallAcc' = mean(correct))
+
+data_analysis = data %>%
+  dplyr::select('PROLIFIC_PID', 'Item', 'List', 'Condition', 'WordA', 'WordB', 'Binomial', 'PrimeType', 'Prime', 'Sentence', 'SentenceType', 'Questions', 'Answer', 'key_resp.corr', 'key_resp_4.keys', 'trials.thisN', starts_with("Word")) %>%
+  #filter(!is.na(List)) %>%
+  mutate(correct = ifelse(`key_resp_4.keys` == Answer, 1, 0)) %>%
+  rename('participant' = 'PROLIFIC_PID') %>%
+  group_by(participant) %>%
+  mutate('OverallAcc' = mean(correct)) 
+  
+
+
+audio_questions_key = read_csv('../Data/audio_questions.csv')
+#audio_questions_key$Item = factor(audio_questions_key$Item)
+
+
+data_analysis = data_analysis %>%
+  left_join(audio_questions_key)
+
+audio_only = data_analysis %>%
+  filter(Question_about_audio == '1') %>%
+  mutate(correct = ifelse(`key_resp_4.keys` == Answer, 1, 0)) %>%
+  group_by(participant) %>%
+  mutate('AudioAcc' = mean(correct)) %>%
+  slice_head(n=1) %>%
+  select(participant, AudioAcc)
+
+data_analysis = data_analysis %>%
+  left_join(audio_only)
+
+# 
+
+# data_analysis2 = pilot %>%
+#   full_join(data_analysis)
+
+# data_analysis = data_analysis2
+
+data_analysis = data_analysis %>%
+  mutate(sentence_split = str_split(Sentence, " "))
+
+data_analysis = data_analysis %>%
+  rowwise() %>%  # Ensures per-row operation
+  mutate(target_word_index = case_when(
+    SentenceType == 'Sentence (alphabetical)' ~ which(sentence_split == WordA)[1],
+    SentenceType == 'Sentence (nonalphabetical)' ~ which(sentence_split == WordB)[1],
+    TRUE ~ NA_real_
+  )) %>%
+  ungroup()  # Remove rowwise grouping
+
+
+
+
+data_analysis = data_analysis %>%
+  mutate(target_word_index = target_word_index - 1)
+
+
+
+data_analysis1 = data_analysis %>%
+  pivot_longer(cols = matches("^Word[0-9]+$"), names_to = 'word_index', names_prefix = 'Word', values_to = 'reading_time')
+
+
+
+data_analysis1 = data_analysis1 %>%
+  mutate(
+    words = str_split(Sentence, "\\s+"),  # Split sentences into words
+    extracted_word = mapply(function(word_list, idx) {
+      adj_idx = as.numeric(idx) + 1  # Adjust for 0-based index
+      if (adj_idx > length(word_list) | adj_idx < 1) NA else word_list[adj_idx]
+    }, words, word_index)
+  ) %>%
+  select(-words)  # Drop the intermediate list column
+
+data_analysis1$word_index = as.numeric(data_analysis1$word_index)
+data_analysis1$target_word_index = as.numeric(data_analysis1$target_word_index)
+data_analysis1$reading_time = data_analysis1$reading_time * 1000 #conver to ms
+
+data_analysis1 = data_analysis1 %>%
+  ungroup() %>%
+  mutate('target' = ifelse(word_index >= target_word_index & word_index <= (target_word_index + 2), 1, 0)) %>%
+  ungroup() %>%
+  mutate('spillover' = ifelse(word_index >= (target_word_index + 3) & word_index <= (target_word_index + 5), 1, 0)) 
+
+data_analysis1 = data_analysis1 %>%
+  mutate(word_len = nchar(extracted_word))
+
+data_analysis1 = data_analysis1 %>%
+  filter(!is.na(reading_time))
+
+data_analysis1$participant = factor(data_analysis1$participant)
+data_analysis1$Item = factor(data_analysis1$Item)
+data_analysis1$rt = data_analysis1$reading_time
+
+data_analysis1 = data_analysis1 %>%
+  filter(extracted_word != '+')
+
+
+
+data_analysis1 <- data_analysis1 %>%
+  arrange(Item, word_index) %>%
+  group_by(Item) %>%
+  slice(1:(n() - 1)) %>%  # Selects all but the last row per group
+  ungroup()
+
+data_analysis1$participant = factor(data_analysis1$participant)
+
+residual_rts = data.frame(residual_rts = res.rt(data_analysis1, subj.name = 'participant', wordlen.name = 'word_len'))
+
+data_analysis1$residual_rts = residual_rts$residual_rts
+
+
+key = read_csv('../Data/key.csv')
+
+key$Item = factor(key$Item)
+
+  
+data_analysis1 = data_analysis1 %>%
+  left_join(key) 
+  
+length(unique(data_analysis1$Item))
+
+data_analysis1$prime_freq = factor(data_analysis1$prime_freq, levels = c('unrelated', 'frequent'))
+data_analysis1$target_freq = factor(data_analysis1$target_freq, levels = c('not-frequent', 'frequent'))
+
+
+data_analysis_second_exp = data_analysis1
+```
+
+## analyses
+
+### Audio Accuracy > 0.7
+
+```{r}
+
+audio_acc_greater_70 = data_analysis1 %>% 
+  filter(!is.na(List)) %>%
+  filter(target == 1 | spillover == 1) %>%
+  filter(rt > 100 & rt < 5000) %>%
+  filter(AudioAcc > 0.7) %>% #exclude low-accuracy participants
+  group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct, prime_freq, target_freq, AudioAcc) %>%
+  summarize(residual_rts = sum(residual_rts)) %>%
+  ungroup()
+
+mean_rts = audio_acc_greater_70 %>%
+  ungroup() %>%
+  summarize(mean(residual_rts))
+
+sd_rts = audio_acc_greater_70 %>%
+  ungroup() %>%
+  summarize(sd(residual_rts))
+
+lower_bound = as.double(mean_rts[1,1]) - 2.5 * as.double(sd_rts[1,1])
+upper_bound = as.double(mean_rts[1,1]) + 2.5 * as.double(sd_rts[1,1])
+
+audio_acc_greater_70 = audio_acc_greater_70 %>%
+  filter((residual_rts > lower_bound) & (residual_rts < upper_bound))
+
+  
+
+audio_acc_greater_70$prime_freq = relevel(audio_acc_greater_70$prime_freq, ref = 'unrelated')
+audio_acc_greater_70$target_freq = relevel(audio_acc_greater_70$target_freq, ref = 'not-frequent')
+
+audio_acc_greater_70$participant = factor(audio_acc_greater_70$participant)
+audio_acc_greater_70$Item = factor(audio_acc_greater_70$Item)
+
+length(unique(audio_acc_greater_70$participant))
+length(unique(audio_acc_greater_70$Item))
+
+
+
+```
+### Models
+
+```{r}
+
+audio_acc_70 = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
+          data = audio_acc_greater_70,
+          iter = 8000, 
+          warmup = 4000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         #control = list(adapt_delta = 0.99),
+         file = 'audio_accuracy_greater_70_pilotexp2' #accuracy_greater_90
+)
+
+
+audio_acc_70_prime = brm(residual_rts ~ 0 + Intercept + prime_freq + 
+            (prime_freq | Item) + (prime_freq | participant),
+          data = audio_acc_greater_70,
+          iter = 8000, 
+          warmup = 4000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         #control = list(adapt_delta = 0.99),
+         file = 'audio_accuracy_greater_70_prime_pilotexp2' #accuracy_greater_90
+)
+
+audio_acc_70_target = brm(residual_rts ~ 0 + Intercept + target_freq + 
+            (target_freq | Item) + (target_freq | participant),
+          data = audio_acc_greater_70,
+          iter = 8000, 
+          warmup = 4000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         #control = list(adapt_delta = 0.99),
+         file = 'audio_accuracy_greater_70_target_pilotexp2' #accuracy_greater_90
+)
+
+
+
+only_freq_target = audio_acc_greater_70 %>%
+  filter(target_freq == 'frequent')
+
+audio_acc_70_target_only_freq = brm(residual_rts ~ 0 + Intercept + prime_freq + 
+            (prime_freq | Item) + (prime_freq | participant),
+          data = only_freq_target,
+          iter = 10000, 
+          warmup = 5000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 50)", class = "b"),
+                set_prior("student_t(3, 0, 50)", class = "sd")),
+         control = list(adapt_delta = 0.99),
+         file = 'audio_accuracy_greater_70_target_freq_pilotexp2' #accuracy_greater_90
+)
+
+
+
+percent_greater_zero = data.frame(fixef(audio_acc_70, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+percent_greater_zero
+
+
+fixef(audio_acc_70)
+fixef(audio_acc_70_prime)
+fixef(audio_acc_70_target)
+fixef(audio_acc_70_target_only_freq)
+
+
+conditional_effects(audio_acc_70)
+conditional_effects(audio_acc_70_prime)
+conditional_effects(audio_acc_70_target)
+conditional_effects(audio_acc_70_target_only_freq)
+
+
+```
+#### Sum coded
+
+```{r}
+options (contrasts = c('contr.sum','contr.sum'))
+
+
+audio_acc_70_sum_coded = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
+          data = audio_acc_greater_70,
+          iter = 8000, 
+          warmup = 4000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),        
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         #control = list(adapt_delta = 0.99),
+         file = 'audio_accuracy_greater_70_pilotexp2_sum_coded' #accuracy_greater_90
+)
+
+
+audio_acc_70_prime_sum_coded = brm(residual_rts ~ 0 + Intercept + prime_freq + 
+            (prime_freq | Item) + (prime_freq | participant),
+          data = audio_acc_greater_70,
+          iter = 8000, 
+          warmup = 4000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         #control = list(adapt_delta = 0.99),
+         file = 'audio_accuracy_greater_70_prime_pilotexp2_sum_coded' #accuracy_greater_90
+)
+
+audio_acc_70_target_sum_coded = brm(residual_rts ~ 0 + Intercept + target_freq + 
+            (target_freq | Item) + (target_freq | participant),
+          data = audio_acc_greater_70,
+          iter = 8000, 
+          warmup = 4000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         #control = list(adapt_delta = 0.99),
+         file = 'audio_accuracy_greater_70_target_pilotexp2_sum_coded' #accuracy_greater_90
+)
+
+
+
+audio_acc_70_target_only_freq_sum_coded = brm(residual_rts ~ 0 + Intercept + prime_freq + 
+            (prime_freq | Item) + (prime_freq | participant),
+          data = only_freq_target,
+          iter = 10000, 
+          warmup = 5000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 50)", class = "b"),
+                set_prior("student_t(3, 0, 50)", class = "sd")),
+         control = list(adapt_delta = 0.99),
+         file = 'audio_accuracy_greater_70_target_freq_pilotexp2_sum_coded' #accuracy_greater_90
+)
+
+
+
+percent_greater_zero = data.frame(fixef(audio_acc_70_sum_coded, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+percent_greater_zero
+
+
+fixef(audio_acc_70_sum_coded)
+fixef(audio_acc_70_prime_sum_coded)
+fixef(audio_acc_70_target_sum_coded)
+fixef(audio_acc_70_target_only_freq_sum_coded)
+
+
+conditional_effects(audio_acc_70_sum_coded)
+conditional_effects(audio_acc_70_prime_sum_coded)
+conditional_effects(audio_acc_70_target_sum_coded)
+conditional_effects(audio_acc_70_target_only_freq_sum_coded)
+
+
+
+options (contrasts = c('contr.treatment','contr.treatment'))
+
+```
+
+
+
+### Overall Acc > 0.7
+
+```{r}
+
+overall_acc_greater_70 = data_analysis1 %>% 
+  filter(!is.na(List)) %>%
+  filter(target == 1 | spillover == 1) %>%
+  filter(rt > 100 & rt < 5000) %>%
+  filter(OverallAcc > 0.7) %>% #exclude low-accuracy participants
+  group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct, prime_freq, target_freq, AudioAcc) %>%
+  summarize(residual_rts = sum(residual_rts)) %>%
+  ungroup()
+
+mean_rts = overall_acc_greater_70 %>%
+  ungroup() %>%
+  summarize(mean(residual_rts))
+
+sd_rts = overall_acc_greater_70 %>%
+  ungroup() %>%
+  summarize(sd(residual_rts))
+
+lower_bound = as.double(mean_rts[1,1]) - 2.5 * as.double(sd_rts[1,1])
+upper_bound = as.double(mean_rts[1,1]) + 2.5 * as.double(sd_rts[1,1])
+
+overall_acc_greater_70 = overall_acc_greater_70 %>%
+  filter((residual_rts > lower_bound) & (residual_rts < upper_bound))
+
+  
+
+overall_acc_greater_70$prime_freq = relevel(overall_acc_greater_70$prime_freq, ref = 'unrelated')
+overall_acc_greater_70$target_freq = relevel(overall_acc_greater_70$target_freq, ref = 'not-frequent')
+
+overall_acc_greater_70$participant = factor(overall_acc_greater_70$participant)
+overall_acc_greater_70$Item = factor(overall_acc_greater_70$Item)
+
+length(unique(overall_acc_greater_70$participant))
+length(unique(overall_acc_greater_70$Item))
+
+
+
+```
+#### Models
+
+```{r}
+
+overall_acc_70 = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
+          data = overall_acc_greater_70,
+          iter = 8000, 
+          warmup = 4000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         #control = list(adapt_delta = 0.99),
+         file = 'overall_accuracy_greater_70_pilotexp2' #accuracy_greater_90
+)
+
+
+overall_acc_70_prime = brm(residual_rts ~ 0 + Intercept + prime_freq + 
+            (prime_freq | Item) + (prime_freq | participant),
+          data = overall_acc_greater_70,
+          iter = 8000, 
+          warmup = 4000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         #control = list(adapt_delta = 0.99),
+         file = 'overall_accuracy_greater_70_prime_pilotexp2' #accuracy_greater_90
+)
+
+overall_acc_70_target = brm(residual_rts ~ 0 + Intercept + target_freq + 
+            (target_freq | Item) + (target_freq | participant),
+          data = overall_acc_greater_70,
+          iter = 8000, 
+          warmup = 4000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         #control = list(adapt_delta = 0.99),
+         file = 'overall_accuracy_greater_70_target_pilotexp2' #accuracy_greater_90
+)
+
+
+
+overall_acc_only_freq_target = overall_acc_greater_70 %>%
+  filter(target_freq == 'frequent')
+
+overall_acc_70_target_only_freq = brm(residual_rts ~ 0 + Intercept + prime_freq + 
+            (prime_freq | Item) + (prime_freq | participant),
+          data = overall_acc_only_freq_target,
+          iter = 10000, 
+          warmup = 5000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 50)", class = "b"),
+                set_prior("student_t(3, 0, 50)", class = "sd")),
+         control = list(adapt_delta = 0.99),
+         file = 'overall_accuracy_greater_70_target_freq_pilotexp2' #accuracy_greater_90
+)
+
+
+
+percent_greater_zero = data.frame(fixef(audio_acc_70, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+percent_greater_zero
+
+
+fixef(overall_acc_70)
+fixef(overall_acc_70_prime)
+fixef(overall_acc_70_target)
+fixef(overall_acc_70_target_only_freq)
+
+
+conditional_effects(overall_acc_70)
+conditional_effects(overall_acc_70)
+conditional_effects(overall_acc_70_prime)
+conditional_effects(overall_acc_70_target)
+
+
+```
+# Aggregate data, word-by-word RTs
+
+```{r}
+
+first_data = data_analysis_first_exp %>% 
+  left_join(mental_rotation_summary, by = c('participant', 'Sentence')) %>%
+  filter(mean_angle < 90) %>%
+  filter(!is.na(List)) %>%
+  filter(rt > 100 & rt < 5000) %>%
+  filter(AudioAcc > 0.7) %>% #exclude low-accuracy participants
+  select(participant, Condition, extracted_word, prime_freq, target_freq, residual_rts, word_index, target_word_index)
+
+second_data = data_analysis_second_exp %>% 
+  filter(!is.na(List)) %>%
+  filter(rt > 100 & rt < 5000) %>%
+  filter(AudioAcc > 0.7) %>% #exclude low-accuracy participants
+  select(participant, Condition, extracted_word, prime_freq, target_freq, residual_rts, word_index, target_word_index)
+
+nrow(first_data)
+nrow(second_data)
+
+aggregate_data = first_data %>%
+  full_join(second_data)
+
+nrow(aggregate_data)
+
+
+
+mean_rts = aggregate_data %>%
+  ungroup() %>%
+  summarize(mean(residual_rts))
+
+sd_rts = aggregate_data %>%
+  ungroup() %>%
+  summarize(sd(residual_rts))
+
+lower_bound = as.double(mean_rts[1,1]) - 2.5 * as.double(sd_rts[1,1])
+upper_bound = as.double(mean_rts[1,1]) + 2.5 * as.double(sd_rts[1,1])
+
+aggregate_data = aggregate_data %>%
+  filter((residual_rts > lower_bound) & (residual_rts < upper_bound))
+
+  
+
+aggregate_data$prime_freq = relevel(aggregate_data$prime_freq, ref = 'unrelated')
+aggregate_data$target_freq = relevel(aggregate_data$target_freq, ref = 'not-frequent')
+
+aggregate_data$participant = factor(aggregate_data$participant)
+
+length(unique(aggregate_data$participant))
+length(unique(aggregate_data$Item))
+
+
+
+aggregate_data = aggregate_data %>%
+  mutate(distance_from_target_region = word_index - target_word_index)
+
+word_by_word_rts = aggregate_data %>%
+  filter(prime_freq %in% c('frequent', 'unrelated')) %>%
+  group_by(prime_freq, target_freq, distance_from_target_region) %>%
+  summarize(
+    mean_rts = mean(residual_rts),
+    sd_rts = sd(residual_rts),  
+    n = n(),
+    se = sd_rts / sqrt(n) # Compute the 95% CI
+  )
+
+
+word_by_word_rts$ci95_rts = word_by_word_rts$sd_rts / sqrt(word_by_word_rts$n) * 1.96
+
+word_by_word_rts = word_by_word_rts %>%
+  filter(distance_from_target_region > -5 & distance_from_target_region < 8)
+  
+word_by_word_rts$distance_from_target_region = factor(word_by_word_rts$distance_from_target_region)
+
+ggplot(word_by_word_rts, aes(x = distance_from_target_region, y = mean_rts, color = prime_freq)) +
+  geom_point(position = position_dodge(0.2)) +
+  geom_errorbar(aes(ymin = mean_rts - sd_rts, ymax = mean_rts + sd_rts), width = 0.2, position = position_dodge(0.2)) +
+  ylim(c(-200, 200)) +
+  facet_wrap(~target_freq) + 
+  #ylim(c(min(mean_rts), max(mean_rts))) +
+  geom_segment(aes(x = as.factor(0), xend = as.factor(0), y = -200, yend = 200), 
+               linetype = "dotted", color = "black", size = 1, alpha = 0.5) +
+  geom_segment(aes(x = as.factor(5), xend = as.factor(5), y = -200, yend = 200), 
+               linetype = "dotted", color = "black", size = 1, alpha = 0.5) +
+  theme_bw()
+
+```
+
+```{r}
+second_data_for_plot = second_data %>%
+  mutate(distance_from_target_region = word_index - target_word_index)
+  
+
+mean_rts = second_data_for_plot %>%
+  ungroup() %>%
+  summarize(mean(residual_rts))
+
+sd_rts = second_data_for_plot %>%
+  ungroup() %>%
+  summarize(sd(residual_rts))
+
+lower_bound = as.double(mean_rts[1,1]) - 2.5 * as.double(sd_rts[1,1])
+upper_bound = as.double(mean_rts[1,1]) + 2.5 * as.double(sd_rts[1,1])
+
+second_data_for_plot = second_data_for_plot %>%
+  filter((residual_rts > lower_bound) & (residual_rts < upper_bound))
+
+word_by_word_rts_second_data = second_data_for_plot %>%
+  filter(prime_freq %in% c('frequent', 'unrelated')) %>%
+  group_by(prime_freq, target_freq, distance_from_target_region) %>%
+  summarize(
+    mean_rts = mean(residual_rts),
+    sd_rts = sd(residual_rts),  
+    n = n(),
+    ci95 = sd_rts / sqrt(n) * 1.96  # Compute the 95% CI
+  )
+
+
+word_by_word_rts_second_data$ci95_rts = word_by_word_rts_second_data$sd_rts / sqrt(word_by_word_rts_second_data$n) * 1.96
+
+ggplot(word_by_word_rts_second_data, aes(x = distance_from_target_region, y = mean_rts, color = prime_freq)) +
+  geom_point(position = position_dodge(0.2)) +
+  geom_errorbar(aes(ymin = mean_rts - sd_rts, ymax = mean_rts + sd_rts), width = 0.2, position = position_dodge(0.2)) +
+  facet_wrap(~target_freq)
+
+```
+
+

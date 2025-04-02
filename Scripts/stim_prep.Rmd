@@ -215,3 +215,56 @@ full_data = full_data %>%
 
 write_csv(full_data, '../Data/key.csv')
 ```
+
+## Pilot Experiment 2
+
+```{r}
+
+data_pilot2 = read_csv('../Data/key.csv')
+
+filler_data = data_pilot2 %>%
+  filter(List == 0)
+
+data_pilot2 = data_pilot2 %>%
+  filter(prime_freq != 'not-frequent')
+
+data_pilot2 = data_pilot2 %>%
+  group_by(Item) %>%
+  mutate(List = sample(1:4, size = 4, replace = F))
+
+counterbalanced_data = data_pilot2
+
+counterbalanced_data %>% 
+  group_by(List) %>%
+  summarize(length(unique(Item)))
+
+condition_counts = counterbalanced_data %>%
+  group_by(List, target_freq, prime_freq) %>%
+  tally() %>%
+  ungroup
+
+
+
+full_data_pilot2 = counterbalanced_data %>%
+  full_join(filler_data)
+
+list1 = full_data_pilot2 %>%
+  filter(List == 1 | List == 0)
+
+list2 = full_data_pilot2 %>%
+  filter(List == 2 | List == 0)
+
+list3 = full_data_pilot2 %>%
+  filter(List == 3 | List == 0)
+
+list4 = full_data_pilot2 %>%
+  filter(List == 4 | List == 0)
+
+
+write_csv(list1, '../Data/list_1_pilot2.csv')
+write_csv(list2, '../Data/list_2_pilot2.csv')
+write_csv(list3, '../Data/list_3_pilot2.csv')
+write_csv(list4, '../Data/list_4_pilot2.csv')
+
+
+```
