@@ -2,7 +2,9 @@
 title: "noisy-channel-binom-pref-analysis"
 author: "Zachary Houghton"
 date: "2025-01-19"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -1588,6 +1590,18 @@ ggplot(word_by_word_rts, aes(x = distance_from_target_region, y = mean_rts, colo
                linetype = "dotted", color = "black", size = 1, alpha = 0.5) +
   theme_bw()
 
+ggplot(word_by_word_rts, aes(x = distance_from_target_region, y = mean_rts, color = target_freq)) +
+  geom_point(position = position_dodge(0.2)) +
+  geom_errorbar(aes(ymin = mean_rts - sd_rts, ymax = mean_rts + sd_rts), width = 0.2, position = position_dodge(0.2)) +
+  ylim(c(-200, 200)) +
+  facet_wrap(~prime_freq) + 
+  #ylim(c(min(mean_rts), max(mean_rts))) +
+  geom_segment(aes(x = as.factor(0), xend = as.factor(0), y = -200, yend = 200), 
+               linetype = "dotted", color = "black", size = 1, alpha = 0.5) +
+  geom_segment(aes(x = as.factor(5), xend = as.factor(5), y = -200, yend = 200), 
+               linetype = "dotted", color = "black", size = 1, alpha = 0.5) +
+  theme_bw()
+
 ```
 
 ```{r}
@@ -1628,5 +1642,689 @@ ggplot(word_by_word_rts_second_data, aes(x = distance_from_target_region, y = me
   facet_wrap(~target_freq)
 
 ```
+# Exp 3
 
+```{r}
+#pilot_data = read.csv('../Data/pilot_results3.csv', quote = "\"")
+data = read.csv('../Data/exp3_sona.csv', quote = "\"")
+
+data_pavlovia = read.csv('../Data/exp3_pavlovia.csv')
+
+data$date = as.Date(data$date)
+data_pavlovia$date = as.Date(data_pavlovia$date)
+
+data_analysis_sona = data %>%
+  dplyr::select('participant', 'Item', 'List', 'Condition', 'WordA', 'WordB', 'Binomial', 'PrimeType', 'Prime', 'Sentence', 'SentenceType', 'Questions', 'Answer', 'key_resp.corr', 'key_resp_4.keys', 'trials.thisN', starts_with("Word")) %>%
+  #filter(!is.na(List)) %>%
+  mutate(correct = ifelse(`key_resp_4.keys` == Answer, 1, 0)) %>%
+  #rename('participant' = 'PROLIFIC_PID') %>%
+  group_by(participant) %>%
+  mutate('OverallAcc' = mean(correct)) 
+  
+data_analysis_pavlovia = data_pavlovia %>%
+  dplyr::select('PROLIFIC_PID', 'Item', 'List', 'Condition', 'WordA', 'WordB', 'Binomial', 'PrimeType', 'Prime', 'Sentence', 'SentenceType', 'Questions', 'Answer', 'key_resp.corr', 'key_resp_4.keys', 'trials.thisN', starts_with("Word")) %>%
+  #filter(!is.na(List)) %>%
+  mutate(correct = ifelse(`key_resp_4.keys` == Answer, 1, 0)) %>%
+  rename('participant' = 'PROLIFIC_PID') %>%
+  group_by(participant) %>%
+  mutate('OverallAcc' = mean(correct)) 
+
+data_analysis_sona$participant = as.character(data_analysis_sona$participant)
+
+data_analysis = data_analysis_sona %>%
+  full_join(data_analysis_pavlovia)
+
+nrow(data_analysis_sona) + nrow(data_analysis_pavlovia) == nrow(data_analysis)
+
+audio_questions_key = read_csv('../Data/audio_questions.csv')
+#audio_questions_key$Item = factor(audio_questions_key$Item)
+
+
+data_analysis = data_analysis %>%
+  left_join(audio_questions_key)
+
+audio_only = data_analysis %>%
+  filter(Question_about_audio == '1') %>%
+  mutate(correct = ifelse(`key_resp_4.keys` == Answer, 1, 0)) %>%
+  group_by(participant) %>%
+  mutate('AudioAcc' = mean(correct)) %>%
+  slice_head(n=1) %>%
+  select(participant, AudioAcc)
+
+data_analysis = data_analysis %>%
+  left_join(audio_only)
+
+# 
+
+# data_analysis2 = pilot %>%
+#   full_join(data_analysis)
+
+# data_analysis = data_analysis2
+
+data_analysis = data_analysis %>%
+  mutate(sentence_split = str_split(Sentence, " "))
+
+data_analysis = data_analysis %>%
+  rowwise() %>%  # Ensures per-row operation
+  mutate(target_word_index = case_when(
+    SentenceType == 'Sentence (alphabetical)' ~ which(sentence_split == WordA)[1],
+    SentenceType == 'Sentence (nonalphabetical)' ~ which(sentence_split == WordB)[1],
+    TRUE ~ NA_real_
+  )) %>%
+  ungroup()  # Remove rowwise grouping
+
+
+
+
+data_analysis = data_analysis %>%
+  mutate(target_word_index = target_word_index - 1)
+
+
+
+data_analysis1 = data_analysis %>%
+  pivot_longer(cols = matches("^Word[0-9]+$"), names_to = 'word_index', names_prefix = 'Word', values_to = 'reading_time')
+
+
+
+data_analysis1 = data_analysis1 %>%
+  mutate(
+    words = str_split(Sentence, "\\s+"),  # Split sentences into words
+    extracted_word = mapply(function(word_list, idx) {
+      adj_idx = as.numeric(idx) + 1  # Adjust for 0-based index
+      if (adj_idx > length(word_list) | adj_idx < 1) NA else word_list[adj_idx]
+    }, words, word_index)
+  ) %>%
+  select(-words)  # Drop the intermediate list column
+
+data_analysis1$word_index = as.numeric(data_analysis1$word_index)
+data_analysis1$target_word_index = as.numeric(data_analysis1$target_word_index)
+data_analysis1$reading_time = data_analysis1$reading_time * 1000 #conver to ms
+
+data_analysis1 = data_analysis1 %>%
+  ungroup() %>%
+  mutate('target' = ifelse(word_index >= target_word_index & word_index <= (target_word_index + 2), 1, 0)) %>%
+  ungroup() %>%
+  mutate('spillover' = ifelse(word_index >= (target_word_index + 3) & word_index <= (target_word_index + 5), 1, 0)) 
+
+data_analysis1 = data_analysis1 %>%
+  mutate(word_len = nchar(extracted_word))
+
+data_analysis1 = data_analysis1 %>%
+  filter(!is.na(reading_time))
+
+data_analysis1$participant = factor(data_analysis1$participant)
+data_analysis1$Item = factor(data_analysis1$Item)
+data_analysis1$rt = data_analysis1$reading_time
+
+data_analysis1 = data_analysis1 %>%
+  filter(extracted_word != '+')
+
+
+
+data_analysis1 <- data_analysis1 %>%
+  arrange(Item, word_index) %>%
+  group_by(Item) %>%
+  slice(1:(n() - 1)) %>%  # Selects all but the last row per group
+  ungroup()
+
+data_analysis1$participant = factor(data_analysis1$participant)
+
+residual_rts = data.frame(residual_rts = res.rt(data_analysis1, subj.name = 'participant', wordlen.name = 'word_len'))
+
+data_analysis1$residual_rts = residual_rts$residual_rts
+
+
+# 
+# 
+# summary_data = data_analysis1 %>%
+#   group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct) %>%
+#   summarize(
+#     target_rt = sum(residual_rts[target == 1], na.rm = TRUE),
+#     spillover_rt = sum(residual_rts[spillover == 1], na.rm = TRUE),
+#     target_len = sum(word_len[target == 1], na.rm = T),
+#     spillover_len = sum(word_len[spillover==1], na.rm = T),
+#     .groups = "drop" 
+#   )
+# 
+# summary_data = summary_data %>%
+#   ungroup() %>%
+#   group_by(participant, Item) %>%
+#   pivot_longer(cols = c('target_rt', 'spillover_rt', 'target_len', 'spillover_len'),
+#                names_to = c("region", ".value"),
+#                names_pattern = "(.+)_(.+)")
+
+
+# code to get residual rts
+# res.rt <- function(dat, subj.name='subj', wordlen.name='wordlen',
+#                         rt.name='rt', verbose=T) {
+#   if(! is.element(wordlen.name,names(dat)))
+#     stop(paste("Error: your data frame doesn't contain a compoment for wordlength named",wordlen.name))
+#     dat <- data.frame(subj = dat[[subj.name]], wordlen = dat[[wordlen.name]],
+#                       rt = dat[[rt.name]])
+#     length.slope <- c() # just to see what typical slope is
+#     res.rt <- c() # full list of residual rts
+# 
+#     for(i in levels(dat$subj)) {
+#       wordlen.subj <- dat$wordlen[dat$subj==i]
+#       if(length(wordlen.subj) == 0)
+#         next
+#       rt.subj <- dat$rt[dat$subj==i]
+#       model <- lm(rt.subj~wordlen.subj)
+#       res.rt[dat$subj==i] <- residuals(model)
+#       length.slope <- c(length.slope, model$coef["wordlen.subj"])
+#     }
+#     mean.slope <- mean(length.slope)
+#     se.slope <- se(length.slope)
+#     if (verbose) {
+#       cat(sprintf('The mean slope was %.1f with an se of %.1f.\n',
+#                   mean.slope, se.slope))
+#     }
+#     return(res.rt)
+# }
+
+
+
+
+```
+
+```{r}
+
+key = read_csv('../Data/key.csv')
+
+key$Item = factor(key$Item)
+
+data_analysis_freq_primes = data_analysis1 %>%
+  left_join(key) %>%
+  filter(prime_freq != 'infrequent') 
+  
+data_analysis1 = data_analysis1 %>%
+  left_join(key) %>%
+  filter(prime_freq != 'frequent') 
+  
+length(unique(data_analysis1$Item))
+
+  
+```
+
+```{r}
+
+data_analysis1$prime_freq = factor(data_analysis1$prime_freq, levels = c('unrelated', 'not-frequent'))
+data_analysis1$target_freq = factor(data_analysis1$target_freq, levels = c('not-frequent', 'frequent'))
+
+```
+
+## Unrelated vs not-frequent prime
+
+### Overall Acc \> 70%
+
+```{r}
+
+target_region_data = data_analysis1 %>% 
+  filter(!is.na(List)) %>%
+  filter(target == 1 | spillover == 1) %>%
+  filter(rt > 100 & rt < 5000) %>%
+  filter(OverallAcc > 0.85) %>% #exclude low-accuracy participants
+  group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct, prime_freq, target_freq, AudioAcc) %>%
+  summarize(residual_rts = sum(residual_rts)) %>%
+  ungroup() %>%
+  group_by(participant) %>%
+  mutate(ExpAcc = mean(correct))
+
+sum(target_region_data['ExpAcc'] > 0.7)
+
+mean_rts = target_region_data %>%
+  ungroup() %>%
+  summarize(mean(residual_rts))
+
+sd_rts = target_region_data %>%
+  ungroup() %>%
+  summarize(sd(residual_rts))
+
+lower_bound = as.double(mean_rts[1,1]) - 2.5 * as.double(sd_rts[1,1])
+upper_bound = as.double(mean_rts[1,1]) + 2.5 * as.double(sd_rts[1,1])
+
+target_region_data = target_region_data %>%
+  filter((residual_rts > lower_bound) & (residual_rts < upper_bound))
+
+  
+
+target_region_data$prime_freq = relevel(target_region_data$prime_freq, ref = 'unrelated')
+target_region_data$target_freq = relevel(target_region_data$target_freq, ref = 'not-frequent')
+
+target_region_data$participant = factor(target_region_data$participant)
+target_region_data$Item = factor(target_region_data$Item)
+
+length(unique(target_region_data$participant))
+length(unique(target_region_data$Item))
+
+rows_per_participant = target_region_data %>% #sanity check
+  group_by(participant) %>%
+  summarize(n())
+
+#using 0 + Intercept syntax following: https://discourse.mc-stan.org/t/understanding-intercept-prior-in-brms/34027
+m1 = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
+          data = target_region_data,
+          iter = 30000, 
+          warmup = 15000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(
+                #set_prior("student_t(3, 0, 30)", class = "Intercept"),
+                set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         control = list(adapt_delta = 0.95),
+         file = 'full_m1_exp3' #accuracy_greater_90
+)
+
+fixef(m1)
+conditional_effects(m1)
+
+percent_greater_zero = data.frame(fixef(m1, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+percent_greater_zero
+
+#fixef_df = data.frame(conditional_effects(m1)[1], plot=F)
+```
+
+### Audio Acc \> 70%
+
+```{r}
+
+audio_acc_greater_70 = data_analysis1 %>% 
+  filter(!is.na(List)) %>%
+  filter(target == 1 | spillover == 1) %>%
+  filter(rt > 100 & rt < 5000) %>%
+  filter(AudioAcc > 0.7) %>% #exclude low-accuracy participants
+  group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct, prime_freq, target_freq, AudioAcc) %>%
+  summarize(residual_rts = sum(residual_rts)) %>%
+  ungroup()
+
+mean_rts = audio_acc_greater_70 %>%
+  ungroup() %>%
+  summarize(mean(residual_rts))
+
+sd_rts = audio_acc_greater_70 %>%
+  ungroup() %>%
+  summarize(sd(residual_rts))
+
+lower_bound = as.double(mean_rts[1,1]) - 2.5 * as.double(sd_rts[1,1])
+upper_bound = as.double(mean_rts[1,1]) + 2.5 * as.double(sd_rts[1,1])
+
+audio_acc_greater_70 = audio_acc_greater_70 %>%
+  filter((residual_rts > lower_bound) & (residual_rts < upper_bound))
+
+  
+
+audio_acc_greater_70$prime_freq = relevel(audio_acc_greater_70$prime_freq, ref = 'unrelated')
+audio_acc_greater_70$target_freq = relevel(audio_acc_greater_70$target_freq, ref = 'not-frequent')
+
+audio_acc_greater_70$participant = factor(audio_acc_greater_70$participant)
+audio_acc_greater_70$Item = factor(audio_acc_greater_70$Item)
+
+length(unique(audio_acc_greater_70$participant))
+length(unique(audio_acc_greater_70$Item))
+
+
+audio_acc_70 = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
+          data = audio_acc_greater_70,
+          iter = 30000, 
+          warmup = 15000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         control = list(adapt_delta = 0.99),
+         file = 'audio_accuracy_greater_70_exp3' #accuracy_greater_90
+)
+
+fixef(audio_acc_70)
+conditional_effects(audio_acc_70)
+
+percent_greater_zero = data.frame(fixef(audio_acc_70, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+percent_greater_zero
+```
+
+## Unrelated vs Frequet Prime
+
+```{r}
+#pilot_data = read.csv('../Data/pilot_results3.csv', quote = "\"")
+data = read.csv('../Data/exp3_sona.csv', quote = "\"")
+
+data_pavlovia = read.csv('../Data/exp3_pavlovia.csv')
+
+data$date = as.Date(data$date)
+data_pavlovia$date = as.Date(data_pavlovia$date)
+
+data_analysis_sona = data %>%
+  dplyr::select('participant', 'Item', 'List', 'Condition', 'WordA', 'WordB', 'Binomial', 'PrimeType', 'Prime', 'Sentence', 'SentenceType', 'Questions', 'Answer', 'key_resp.corr', 'key_resp_4.keys', 'trials.thisN', starts_with("Word")) %>%
+  #filter(!is.na(List)) %>%
+  mutate(correct = ifelse(`key_resp_4.keys` == Answer, 1, 0)) %>%
+  #rename('participant' = 'PROLIFIC_PID') %>%
+  group_by(participant) %>%
+  mutate('OverallAcc' = mean(correct)) 
+  
+data_analysis_pavlovia = data_pavlovia %>%
+  dplyr::select('PROLIFIC_PID', 'Item', 'List', 'Condition', 'WordA', 'WordB', 'Binomial', 'PrimeType', 'Prime', 'Sentence', 'SentenceType', 'Questions', 'Answer', 'key_resp.corr', 'key_resp_4.keys', 'trials.thisN', starts_with("Word")) %>%
+  #filter(!is.na(List)) %>%
+  mutate(correct = ifelse(`key_resp_4.keys` == Answer, 1, 0)) %>%
+  rename('participant' = 'PROLIFIC_PID') %>%
+  group_by(participant) %>%
+  mutate('OverallAcc' = mean(correct)) 
+
+data_analysis_sona$participant = as.character(data_analysis_sona$participant)
+
+data_analysis = data_analysis_sona %>%
+  full_join(data_analysis_pavlovia)
+
+nrow(data_analysis_sona) + nrow(data_analysis_pavlovia) == nrow(data_analysis)
+
+
+audio_questions_key = read_csv('../Data/audio_questions.csv')
+#audio_questions_key$Item = factor(audio_questions_key$Item)
+
+
+data_analysis = data_analysis %>%
+  left_join(audio_questions_key)
+
+audio_only = data_analysis %>%
+  filter(Question_about_audio == '1') %>%
+  mutate(correct = ifelse(`key_resp_4.keys` == Answer, 1, 0)) %>%
+  group_by(participant) %>%
+  mutate('AudioAcc' = mean(correct)) %>%
+  slice_head(n=1) %>%
+  select(participant, AudioAcc)
+
+data_analysis = data_analysis %>%
+  left_join(audio_only)
+
+# 
+
+# data_analysis2 = pilot %>%
+#   full_join(data_analysis)
+
+# data_analysis = data_analysis2
+
+data_analysis = data_analysis %>%
+  mutate(sentence_split = str_split(Sentence, " "))
+
+data_analysis = data_analysis %>%
+  rowwise() %>%  # Ensures per-row operation
+  mutate(target_word_index = case_when(
+    SentenceType == 'Sentence (alphabetical)' ~ which(sentence_split == WordA)[1],
+    SentenceType == 'Sentence (nonalphabetical)' ~ which(sentence_split == WordB)[1],
+    TRUE ~ NA_real_
+  )) %>%
+  ungroup()  # Remove rowwise grouping
+
+
+
+
+data_analysis = data_analysis %>%
+  mutate(target_word_index = target_word_index - 1)
+
+
+
+data_analysis1_freq = data_analysis %>%
+  pivot_longer(cols = matches("^Word[0-9]+$"), names_to = 'word_index', names_prefix = 'Word', values_to = 'reading_time')
+
+
+
+data_analysis1_freq = data_analysis1_freq %>%
+  mutate(
+    words = str_split(Sentence, "\\s+"),  # Split sentences into words
+    extracted_word = mapply(function(word_list, idx) {
+      adj_idx = as.numeric(idx) + 1  # Adjust for 0-based index
+      if (adj_idx > length(word_list) | adj_idx < 1) NA else word_list[adj_idx]
+    }, words, word_index)
+  ) %>%
+  select(-words)  # Drop the intermediate list column
+
+data_analysis1_freq$word_index = as.numeric(data_analysis1_freq$word_index)
+data_analysis1_freq$target_word_index = as.numeric(data_analysis1_freq$target_word_index)
+data_analysis1_freq$reading_time = data_analysis1_freq$reading_time * 1000 #conver to ms
+
+data_analysis1_freq = data_analysis1_freq %>%
+  ungroup() %>%
+  mutate('target' = ifelse(word_index >= target_word_index & word_index <= (target_word_index + 2), 1, 0)) %>%
+  ungroup() %>%
+  mutate('spillover' = ifelse(word_index >= (target_word_index + 3) & word_index <= (target_word_index + 5), 1, 0)) 
+
+data_analysis1_freq = data_analysis1_freq %>%
+  mutate(word_len = nchar(extracted_word))
+
+data_analysis1_freq = data_analysis1_freq %>%
+  filter(!is.na(reading_time))
+
+data_analysis1_freq$participant = factor(data_analysis1_freq$participant)
+data_analysis1_freq$Item = factor(data_analysis1_freq$Item)
+data_analysis1_freq$rt = data_analysis1_freq$reading_time
+
+data_analysis1_freq = data_analysis1_freq %>%
+  filter(extracted_word != '+')
+
+
+
+data_analysis1_freq <- data_analysis1_freq %>%
+  arrange(Item, word_index) %>%
+  group_by(Item) %>%
+  slice(1:(n() - 1)) %>%  # Selects all but the last row per group
+  ungroup()
+
+data_analysis1_freq$participant = factor(data_analysis1_freq$participant)
+
+residual_rts = data.frame(residual_rts = res.rt(data_analysis1_freq, subj.name = 'participant', wordlen.name = 'word_len'))
+
+data_analysis1_freq$residual_rts = residual_rts$residual_rts
+
+key = read_csv('../Data/key.csv')
+
+key$Item = factor(key$Item)
+
+  
+data_analysis1_freq = data_analysis1_freq %>%
+  left_join(key) %>%
+  filter(prime_freq != 'not-frequent') 
+  
+length(unique(data_analysis1_freq$Item))
+
+
+
+data_analysis1_freq$prime_freq = factor(data_analysis1_freq$prime_freq, levels = c('unrelated', 'frequent'))
+data_analysis1_freq$target_freq = factor(data_analysis1_freq$target_freq, levels = c('not-frequent', 'frequent'))
+
+
+
+
+```
+
+### Overall Acc \> 0.7
+
+```{r}
+
+target_region_data_freq = data_analysis1_freq %>% 
+  filter(!is.na(List)) %>%
+  filter(target == 1 | spillover == 1) %>%
+  filter(rt > 100 & rt < 5000) %>%
+  filter(OverallAcc > 0.7) %>% #exclude low-accuracy participants
+  group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct, prime_freq, target_freq, AudioAcc) %>%
+  summarize(residual_rts = sum(residual_rts)) %>%
+  ungroup() %>%
+  group_by(participant) %>%
+  mutate(ExpAcc = mean(correct))
+
+sum(target_region_data_freq['ExpAcc'] > 0.7)
+
+mean_rts = target_region_data_freq %>%
+  ungroup() %>%
+  summarize(mean(residual_rts))
+
+sd_rts = target_region_data_freq %>%
+  ungroup() %>%
+  summarize(sd(residual_rts))
+
+lower_bound = as.double(mean_rts[1,1]) - 2.5 * as.double(sd_rts[1,1])
+upper_bound = as.double(mean_rts[1,1]) + 2.5 * as.double(sd_rts[1,1])
+
+target_region_data_freq = target_region_data_freq %>%
+  filter((residual_rts > lower_bound) & (residual_rts < upper_bound))
+
+  
+
+target_region_data_freq$prime_freq = relevel(target_region_data_freq$prime_freq, ref = 'unrelated')
+target_region_data_freq$target_freq = relevel(target_region_data_freq$target_freq, ref = 'not-frequent')
+
+target_region_data_freq$participant = factor(target_region_data_freq$participant)
+target_region_data_freq$Item = factor(target_region_data_freq$Item)
+
+length(unique(target_region_data_freq$participant))
+length(unique(target_region_data_freq$Item))
+
+rows_per_participant = target_region_data_freq %>% #sanity check
+  group_by(participant) %>%
+  summarize(n())
+#using 0 + Intercept syntax following: https://discourse.mc-stan.org/t/understanding-intercept-prior-in-brms/34027
+m1_freq = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
+          data = target_region_data_freq,
+          iter = 30000, 
+          warmup = 15000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(
+                #set_prior("student_t(3, 0, 30)", class = "Intercept"),
+                set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         control = list(adapt_delta = 0.95),
+         file = 'full_m1_freq_exp3' #accuracy_greater_90
+)
+
+fixef(m1_freq)
+conditional_effects(m1_freq)
+
+percent_greater_zero = data.frame(fixef(m1_freq, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+percent_greater_zero
+```
+
+### Audio Acc \> 0.7
+
+```{r}
+
+audio_acc_greater_70_freq = data_analysis1_freq %>% 
+  filter(!is.na(List)) %>%
+  filter(target == 1 | spillover == 1) %>%
+  filter(rt > 100 & rt < 5000) %>%
+  filter(AudioAcc > 0.7) %>% #exclude low-accuracy participants
+  group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct, prime_freq, target_freq, AudioAcc) %>%
+  summarize(residual_rts = sum(residual_rts)) %>%
+  ungroup()
+
+mean_rts = audio_acc_greater_70_freq %>%
+  ungroup() %>%
+  summarize(mean(residual_rts))
+
+sd_rts = audio_acc_greater_70_freq %>%
+  ungroup() %>%
+  summarize(sd(residual_rts))
+
+lower_bound = as.double(mean_rts[1,1]) - 2.5 * as.double(sd_rts[1,1])
+upper_bound = as.double(mean_rts[1,1]) + 2.5 * as.double(sd_rts[1,1])
+
+audio_acc_greater_70_freq = audio_acc_greater_70_freq %>%
+  filter((residual_rts > lower_bound) & (residual_rts < upper_bound))
+
+  
+
+audio_acc_greater_70_freq$prime_freq = relevel(audio_acc_greater_70_freq$prime_freq, ref = 'unrelated')
+audio_acc_greater_70_freq$target_freq = relevel(audio_acc_greater_70_freq$target_freq, ref = 'not-frequent')
+
+audio_acc_greater_70_freq$participant = factor(audio_acc_greater_70_freq$participant)
+audio_acc_greater_70_freq$Item = factor(audio_acc_greater_70_freq$Item)
+
+length(unique(audio_acc_greater_70_freq$participant))
+length(unique(audio_acc_greater_70_freq$Item))
+
+
+audio_acc_70_freq = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
+          data = audio_acc_greater_70_freq,
+          iter = 30000, 
+          warmup = 15000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         control = list(adapt_delta = 0.99),
+         file = 'audio_accuracy_greater_70_freq_exp3' #accuracy_greater_90
+)
+
+fixef(audio_acc_70_freq)
+conditional_effects(audio_acc_70_freq)
+
+percent_greater_zero = data.frame(fixef(audio_acc_70_freq, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+percent_greater_zero
+```
+
+
+Maybe filter for participants who show an effect of prime?
+
+## Participants sensitive to frequent primes
+
+```{r}
+part_audio_acc_res = data.frame(ranef(audio_acc_70_freq, pars = 'prime_freqfrequent')$participant)
+
+hist(part_audio_acc_res$Estimate.prime_freqfrequent)
+
+parts_neg_prime = part_audio_acc_res %>%
+  filter(`Estimate.prime_freqfrequent` < 0)
+
+parts_neg_prime = parts_neg_prime %>%
+  mutate(participant = rownames(parts_neg_prime))
+
+parts_neg_prime = parts_neg_prime$participant
+
+```
+
+
+```{r eval = F}
+audio_acc_greater_70_neg_prime = audio_acc_greater_70 %>%
+  filter(participant %in% parts_neg_prime)
+
+audio_acc_70_neg_prime = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
+          data = audio_acc_greater_70_neg_prime,
+          iter = 6000, 
+          warmup = 3000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         control = list(adapt_delta = 0.99),
+         file = 'audio_accuracy_greater_70_neg_prime_exp3' #accuracy_greater_90
+)
+
+fixef(audio_acc_70_neg_prime)
+
+```
 
