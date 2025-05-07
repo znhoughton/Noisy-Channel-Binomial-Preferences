@@ -2328,3 +2328,17 @@ fixef(audio_acc_70_neg_prime)
 
 ```
 
+
+```{r}
+library(ggpubr)
+
+p1 = plot(conditional_effects(audio_acc_70_freq), plot = F)[[3]] +
+  theme_bw()
+
+p2 = plot(conditional_effects(audio_acc_70), plot = F)[[3]] +
+  theme_bw()
+
+ggarrange(p1, p2, common.legend = T)
+
+```
+

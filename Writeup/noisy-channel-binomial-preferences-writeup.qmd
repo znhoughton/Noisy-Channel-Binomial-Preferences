@@ -1,0 +1,232 @@
+---
+title: "Noisy-channel Processing of Binomials"
+format: pdf
+editor: visual
+bibliography: references.bib
+---
+
+```{r include = F}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(brms)
+library(sjPlot)
+library(ggpubr)
+
+audio_acc_70 = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
+          data = audio_acc_greater_70,
+          iter = 30000, 
+          warmup = 15000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         control = list(adapt_delta = 0.99),
+         file = '../Scripts/audio_accuracy_greater_70_exp3' #accuracy_greater_90
+)
+
+
+percent_greater_zero = data.frame(fixef(audio_acc_70, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+
+audio_acc_70_freq = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
+            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
+          data = audio_acc_greater_70_freq,
+          iter = 30000, 
+          warmup = 15000,
+          chains = 4,
+          core = 4,
+          thin = 4,
+          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
+                set_prior("student_t(3, 0, 30)", class = "sd")),
+         control = list(adapt_delta = 0.99),
+         file = '../Scripts/audio_accuracy_greater_70_freq_exp3' #accuracy_greater_90
+)
+
+percent_greater_zero_frequent = data.frame(fixef(audio_acc_70_freq, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+```
+
+# Introduction
+
+# Methods
+
+## Procedure
+
+In order to examine the effects of noisy-channel processing on the reading times of binomials, we used a primed self-paced reading task with a mental rotation task. Specifically, participants were first presented auditorily with a prime sentence while completing a mental rotation task. The mental rotation task involved determining whether one was a simple rotation or a mirror image of another image. The rotation was always wither 0 degrees or 45 degrees. Participants were tasked with either pressing the 'f' key or the 'j' key (counter balanced between participants) to indicate that the image was a simple rotation or a mirror image. The idea behind the mental rotation task was that by forcing participants to multi-task, perhaps they would rely more on noisy-channel processes than when they can focus solely on the prime sentences.
+
+After listening to the prime sentence, participants then completed a self-paced reading task. Specifically, participants were presented with a sentence word-by-word and pressed the 'space' key when they were ready to proceed to the next word. Reaction times for the time it took participants to press the 'space' key were recorded. After each sentence, participants were presented with a comprehension question to test their attention. The comprehension questions were questions either about the prime sentence or the sentence they had just read.
+
+## Stimuli
+
+Our stimuli consisted of 30 polarized binomials.[^1] Specifically, these were binomials that occurred more than 400,000 times (out of 323,592,921,465 tokens), calculated from the Google *n*-grams corpus [@michel2011quantitativeanalysisculture]. Additionally, they all had a relative frequency of either less than -0.30 and greater than 0.30, where relative frequency ranges from -0.50 to 0.50, with a number below 0 indicates that the nonalphabetical ordering occurred more than the alphabetical ordering in corpus data, and a number above zero indicates the opposite. The magnitude of the number indicates the strength, with 0.50 indicating that the binomial occurred exclusively in alphabetical ordering and -0.50 indicated the binomial occurred exclusively in nonalphabetical ordering.
+
+[^1]: Our stimuli and analyses are available at the following link: <https://github.com/znhoughton/Noisy-Channel-Binomial-Preferences>. We also include the stimuli in the Appendix section.
+
+For each of these binomials, we created a prime and a target sentence containing the binomial. Specifically, the prime sentences contained the binomial in the frequent ordering (e.g., *bread and butter*), the infrequent ordering, *(butter and bread*), or did not contain a binomial at all. These priming conditions will be referred to as the frequent, infrequent, and unrelated primes respectively hereafter. The target sentences (the sentences read during the self-paced reading task) were either filler sentences, sentences that contained the frequent ordering of the binomial (hereafter referred to as the frequent target) or the infrequent ordering of the binomial (hereafter referred to as the infrequent target).
+
+Our prime and target sentences were crossed such that each target occurred with each prime, however no participant was presented with the same binomial in more than one trial.
+
+## Participants
+
+228 University of California, Davis undergraduate students were given course credit to participate in the study. We recruited an additional 220 participants through Prolific. Altogether, 448 people participated in our study.
+
+Participants were randomly presented with one of 6 conditions. Since we had a 3 x 2 design, 6 conditions were needed so that participants did not encounter the same binomial in more than one trial.
+
+## Analysis
+
+We divided the sentences into a target and spillover region to be our region of analysis. This region included the 3 words in the binomial along with the 3 following words. We then excluded participants whose reading times on this region were less than 100ms or greater than 5000 ms [following @morganAbstractKnowledgeDirect2016]. We also excluded participants who had an average accuracy below 0.7 on the audio comprehension questions (the questions that asked about the auditorily presented prime). Finally, we excluded trials with residual reading times outside of 2.5 standard deviations from the mean.
+
+We then ran two Bayesian mixed-effects regression models with residual reading times as the dependent variable.[^2]
+
+[^2]: A pre-registration of our study is available at the following link: <https://aspredicted.org/t324-swgk.pdf>.
+
+For the first model, we were interested in whether a frequent prime affected the residual reading times. As such, we filtered the dataframe to include trials that contained either an unrelated or frequent prime. We then treatment coded our variables such that for the prime sentences, 0 indicated an unrelated prime and 1 indicated a frequent prime. For target sentences, 0 indicated an infrequent target while 1 indicated a frequent target. We then ran a model with residual reading time as the dependent variable, fixed-effects for prime, target, and their interaction, as well as maximal random-effects [following @barrRandomEffectsStructure2013].
+
+Our second model was similar, however we were interested in how the infrequent prime affected residual reading times. As such, we filtered our dataframe to include trials that contained either the unrelated or infrequent prime. We then treatement coded our variables such that 0 indicated an unrelated prime and 1 indicated an infrequent prime.
+
+Our model syntax was the same for both models, as mentioned previously the difference was the levels of the variables included in the data.
+
+$$
+\text{Residual Reading Time} ~ 0 + \text{Intercept} + \text{prime freq} * \text{target freq} \\ +             (\text{prime freq} * \text{target freq} | \text{Item}) + (\text{prime freq} * \text{target freq} | \text{participant})
+$$ {#eq-models}
+
+# Results
+
+We first examined whether a frequent prime facilitated the reading of the frequent ordering of the binomial more than the reading time of the infrequent ordering. Following @houghtonTaskdependentConsequencesDisfluency2024, in addition to reporting the estimates we also report the percentage of posterior samples greater than zero. Bayesian statistics don't force us into a binary interpretation of significance or non-significance, by reporting the percentage of posterior samples greater than zero we are able to interpret the results in a more nuanced manner.
+
+```{r, echo = F, message = F}
+#| label: tbl-frequentresults
+#| tbl-cap: 'Results of the statistical model for the frequent vs unrelated prime.'
+
+
+m_frequent = as.data.frame(fixef(audio_acc_70_freq)) %>%
+  mutate(term = c('Intercept', 'Frequent Prime', 'Frequent Target', 'Frequent Prime:Frequent Target'))
+
+percent_greater_zero_frequent = percent_greater_zero_frequent %>%
+  arrange(match(beta_coefficient, c('Intercept', 'prime_freqfrequent', 'target_freqfrequent', 'prime_freqfrequent.target_freqfrequent')))
+
+m_frequent = m_frequent %>%
+  mutate(percent_greater_zero = percent_greater_zero_frequent$`(sum(estimate > 0)/length(estimate)) * 100`) %>%
+  mutate_if(is.numeric,
+            formatC,
+            format = 'f', 
+            digits = 3) %>%
+    rename('% Samples > 0' = `percent_greater_zero`)
+
+
+m_frequent = m_frequent %>%
+  mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric))
+
+#groupings=rle(prod_both_meanings$meaning)
+
+m_frequent %>%
+  select(term, everything()) %>%
+  rename(` ` = term) %>%
+  kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
+  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
+  row_spec(0, bold = TRUE) %>%
+  column_spec(1, bold = T, width = '18em')
+
+```
+
+```{r, echo = F, message = F}
+#| label: tbl-infrequentresults
+#| tbl-cap: 'Results of the statistical model for the infrequent vs unrelated prime.'
+
+
+m_infrequent = as.data.frame(fixef(audio_acc_70)) %>%
+  mutate(term = c('Intercept', 'Infrequent Prime', 'Frequent Target', 'Infrequent Prime:Frequent Target'))
+
+percent_greater_zero = percent_greater_zero %>%
+  arrange(match(beta_coefficient, c('Intercept', 'prime_freqnotMfrequent', 'target_freqfrequent', 'prime_freqnotMfrequent.target_freqfrequent')))
+
+m_infrequent = m_infrequent %>%
+  mutate(percent_greater_zero = percent_greater_zero$`(sum(estimate > 0)/length(estimate)) * 100`) %>%
+  mutate_if(is.numeric,
+            formatC,
+            format = 'f', 
+            digits = 3) %>%
+    rename('% Samples > 0' = `percent_greater_zero`)
+
+
+m_infrequent = m_infrequent %>%
+  mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric))
+
+#groupings=rle(prod_both_meanings$meaning)
+
+m_infrequent %>%
+  select(term, everything()) %>%
+  rename(` ` = term) %>%
+  kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
+  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
+  row_spec(0, bold = TRUE) %>%
+  column_spec(1, bold = T, width = '18em')
+
+```
+
+```{r, echo = F, out.width = '80%', fig.align = 'center', warning = F, message = F}
+#| label: fig-fullresults
+#| fig-cap: "Plot of our results. Points indicate"
+#| fig-height: 6
+#| fig-width: 7
+
+
+p1 = plot(conditional_effects(audio_acc_70_freq), plot = F)[[3]] +
+  scale_color_manual(
+    values = c("not-frequent" = "#66c2a5", "frequent" = "#8da0cb"),
+    labels = c("not-frequent" = "Infrequent", "frequent" = "Frequent")
+  ) +
+  scale_fill_manual(
+    values = c("not-frequent" = "#66c2a5", "frequent" = "#8da0cb"),
+    labels = c("not-frequent" = "Infrequent", "frequent" = "Frequent")
+  ) +
+  labs(
+    x = 'Prime Sentence',
+    y = 'Residual Reading Times',
+    color = 'Target Sentence',
+    fill = 'Target Sentence'
+  ) +
+  scale_x_discrete(
+    labels = c('unrelated' = 'Unrelated', 'frequent' = 'Frequent')
+  ) +
+  theme_bw()
+
+p2 = plot(conditional_effects(audio_acc_70), plot = F)[[3]] +
+  scale_color_manual(
+    values = c("not-frequent" = "#66c2a5", "frequent" = "#8da0cb"),
+    labels = c("not-frequent" = "Infrequent", "frequent" = "Frequent")
+  ) +
+  scale_fill_manual(
+    values = c("not-frequent" = "#66c2a5", "frequent" = "#8da0cb"),
+    labels = c("not-frequent" = "Infrequent", "frequent" = "Frequent")
+  ) +
+  labs(
+    x = 'Prime Sentence',
+    y = 'Residual Reading Times',
+    color = 'Target Sentence',
+    fill = 'Target Sentence'
+  ) +
+  scale_x_discrete(
+    labels = c('unrelated' = 'Unrelated', 'not-frequent' = 'Infrequent')
+  ) +
+  theme_bw()
+
+ggarrange(p1, p2, common.legend = T)
+
+```
+
+# Discussion
+
+# Appendix
+
+Our full stimuli list is included below.
