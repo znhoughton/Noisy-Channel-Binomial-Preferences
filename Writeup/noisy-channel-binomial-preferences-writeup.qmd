@@ -1,7 +1,73 @@
 ---
 title: "Noisy-channel Processing of Binomials"
-format: pdf
+subtitle: "Thesis"
 editor: visual
+
+author:
+    - name: "ZACHARY NICHOLAS HOUGHTON"
+      orcid: "0000-0002-0320-8881"
+      degree: "Psychology"
+      affiliations:
+        - name: "University of California, Davis"
+          department: "Department of Psychology"
+
+degree: "Psychology"
+dissertation_name: "Dissertation Name"
+author_name: "ZACHARY NICHOLAS HOUGHTON"
+field_of_study: "Psychology"
+committee_member_1: "Dr. Fernanda Ferreira, Chair"
+committee_member_2: "john doe"
+committee_member_3: "Dr. Emily Morgan"
+submission_year: "2025"
+  
+format:
+  pdf:
+    template-partials:
+      - before-body.tex
+      #- toc.tex
+    number-sections: true
+    latex-engine: xelatex 
+    documentclass: scrartcl   # LaTeX document class for professional formatting
+    number-depth: 3
+    # Caption Formatting
+    fig-cap-location: top      # Figure captions above
+    tbl-cap-location: top      # Table captions above
+    fig-pos: 'htbp'        # Let LaTeX decide where to place the figures
+    fig-align: center       # Centering figures
+    keep-tex: true             # Optional: for debugging TeX
+    latex-output: houghton_thesis.tex
+    # Font Settings
+    fontsize: 12pt
+    mainfont: "Crimson"        # Primary text font
+    CJKmainfont: "Noto Serif KR"  # Font for Korean text
+    link-citations: true       # Enable hyperlinked citations
+    colorlinks: false          # Disable colored hyperlinks
+    toc: true
+    toc-depth: 3
+    #toc-title: "Table of Contents"
+    #lot: true                  # Enable List of Tables
+    #lof: true                  # Enable List of Figures
+
+    # Page Layout #Not supposed to use geometry for koma apparently
+    geometry:
+      - left=1in
+      - right=1in
+      - top=1in
+      - bottom=1in
+
+    include-in-header: 
+      - include-in-header.tex
+
+  docx:
+    number-sections: true
+    number-depth: 3
+    toc-title: Table of Contents
+    toc: true
+    toc-depth: 3
+    reference-doc: reference.docx
+        
+      
+csl: apa.csl
 bibliography: references.bib
 ---
 
@@ -54,35 +120,49 @@ percent_greater_zero_frequent = data.frame(fixef(audio_acc_70_freq, summary = F)
   summarize((sum(estimate > 0) / length(estimate)) * 100)
 ```
 
+\newpage
+
+\doublespacing
+
+\setlength{\parindent}{4em}
+
+# Abstract {#sec-abstract .unnumbered}
+
+Abstract
+
+\newpage
+
+\pagenumbering{arabic}
+
 # Introduction
 
 # Methods
 
 ## Procedure
 
-In order to examine the effects of noisy-channel processing on the reading times of binomials, we used a primed self-paced reading task with a mental rotation task. Specifically, participants were first presented auditorily with a prime sentence while completing a mental rotation task. The mental rotation task involved determining whether one was a simple rotation or a mirror image of another image. The rotation was always wither 0 degrees or 45 degrees. Participants were tasked with either pressing the 'f' key or the 'j' key (counter balanced between participants) to indicate that the image was a simple rotation or a mirror image. The idea behind the mental rotation task was that by forcing participants to multi-task, perhaps they would rely more on noisy-channel processes than when they can focus solely on the prime sentences.
+In order to examine the effects of noisy-channel processing on the reading times of binomials, we used a primed self-paced reading task with a mental rotation task. Specifically, participants were first presented auditorily with a prime sentence while simultaneously completing a mental rotation task. The mental rotation task involved determining whether one was a simple rotation or a mirror image of another image. The rotation was always wither 0 degrees or 45 degrees. Participants were tasked with either pressing the 'f' key or the 'j' key (counter balanced between participants) to indicate that the image was either a simple rotation or a mirror image. The idea behind the mental rotation task was that by forcing participants to multi-task they may rely more on noisy-channel processing than when they can focus solely on the prime sentences.
 
-After listening to the prime sentence, participants then completed a self-paced reading task. Specifically, participants were presented with a sentence word-by-word and pressed the 'space' key when they were ready to proceed to the next word. Reaction times for the time it took participants to press the 'space' key were recorded. After each sentence, participants were presented with a comprehension question to test their attention. The comprehension questions were questions either about the prime sentence or the sentence they had just read.
+After listening to the prime sentence and completing the mental rotation, participants then completed a self-paced reading task. Specifically, participants were presented with a sentence word-by-word and pressed the 'space' key when they were ready to proceed to the next word. Reaction times for the time it took participants to press the 'space' key were recorded for each word. After each sentence, participants were presented with a comprehension question to test their attention. The comprehension questions were questions either about the prime sentence or the sentence they had just read.
 
 ## Stimuli
 
-Our stimuli consisted of 30 polarized binomials.[^1] Specifically, these were binomials that occurred more than 400,000 times (out of 323,592,921,465 tokens), calculated from the Google *n*-grams corpus [@michel2011quantitativeanalysisculture]. Additionally, they all had a relative frequency of either less than -0.30 and greater than 0.30, where relative frequency ranges from -0.50 to 0.50, with a number below 0 indicates that the nonalphabetical ordering occurred more than the alphabetical ordering in corpus data, and a number above zero indicates the opposite. The magnitude of the number indicates the strength, with 0.50 indicating that the binomial occurred exclusively in alphabetical ordering and -0.50 indicated the binomial occurred exclusively in nonalphabetical ordering.
+Our stimuli consisted of 30 polarized binomials.[^1] Specifically, these were binomials that occurred more than 400,000 times (out of 323,592,921,465 tokens), calculated using the Google *n*-grams corpus [@michel2011quantitativeanalysisculture]. Additionally, they all had a relative frequency of either less than -0.30 and greater than 0.30. Relative frequency indicates which ordering is more preferred (and to what magnitude). For example, a binomial that occurs equally as many times in both orders would have a relative frequency of zero (where relative frequency ranges from -0.50 to 0.50). A relative frequency value below 0 indicates that the nonalphabetical ordering occurred more than the alphabetical ordering in corpus data, and a number above zero indicates the opposite. The magnitude of the number indicates the strength, with 0.50 indicating that the binomial occurred exclusively in alphabetical ordering and -0.50 indicated the binomial occurred exclusively in nonalphabetical ordering.
 
-[^1]: Our stimuli and analyses are available at the following link: <https://github.com/znhoughton/Noisy-Channel-Binomial-Preferences>. We also include the stimuli in the Appendix section.
+[^1]: Our stimuli and analyses are available at the following link: <https://github.com/znhoughton/Noisy-Channel-Binomial-Preferences>. The stimuli are also included in the appendix section (@sec-full-list-of-stimuli).
 
-For each of these binomials, we created a prime and a target sentence containing the binomial. Specifically, the prime sentences contained the binomial in the frequent ordering (e.g., *bread and butter*), the infrequent ordering, *(butter and bread*), or did not contain a binomial at all. These priming conditions will be referred to as the frequent, infrequent, and unrelated primes respectively hereafter. The target sentences (the sentences read during the self-paced reading task) were either filler sentences, sentences that contained the frequent ordering of the binomial (hereafter referred to as the frequent target) or the infrequent ordering of the binomial (hereafter referred to as the infrequent target).
+For each of these binomials, we created a prime and a target sentence containing the binomial in either order. Specifically, for each binomial, three prime sentences were made: one that contained the binomial in the frequent ordering (e.g., *bread and butter*), one that contained the infrequent ordering, (*butter and bread*), and one that did not contain a binomial at all. These priming conditions are referred to as the frequent, infrequent, and unrelated primes respectively. We also made two target sentences (the sentences read during the self-paced reading task) for each binomial. The target sentences contained the binomial in either the frequent or infrequent ordering. Finally, we also included 30 filler trials, which did not contain binomials in the prime or target sentences.
 
 Our prime and target sentences were crossed such that each target occurred with each prime, however no participant was presented with the same binomial in more than one trial.
 
 ## Participants
 
-228 University of California, Davis undergraduate students were given course credit to participate in the study. We recruited an additional 220 participants through Prolific. Altogether, 448 people participated in our study.
+228 University of California, Davis undergraduate students were given course credit to participate in the study. We also recruited an additional 220 participants through Prolific. Altogether, 448 people participated in our study.
 
-Participants were randomly presented with one of 6 conditions. Since we had a 3 x 2 design, 6 conditions were needed so that participants did not encounter the same binomial in more than one trial.
+Participants were randomly presented with one of 6 conditions. Since our design is a 3 x 2 design, 6 conditions were created so that participants did not encounter the same binomial in more than one trial.
 
 ## Analysis
 
-We divided the sentences into a target and spillover region to be our region of analysis. This region included the 3 words in the binomial along with the 3 following words. We then excluded participants whose reading times on this region were less than 100ms or greater than 5000 ms [following @morganAbstractKnowledgeDirect2016]. We also excluded participants who had an average accuracy below 0.7 on the audio comprehension questions (the questions that asked about the auditorily presented prime). Finally, we excluded trials with residual reading times outside of 2.5 standard deviations from the mean.
+We divided the sentences into a target and spillover region to be our region of analysis. This region included the 3 words in the binomial along with the 3 following words. We then excluded participants whose reading times on this region were less than 100ms or greater than 5000 ms [following @morganAbstractKnowledgeDirect2016]. We also excluded participants who had an average accuracy below 0.7 on the audio comprehension questions (the questions that asked about the auditorily presented prime). Finally, we excluded trials for which the residual reading times were outside of 2.5 standard deviations from the mean.
 
 We then ran two Bayesian mixed-effects regression models with residual reading times as the dependent variable.[^2]
 
@@ -90,17 +170,22 @@ We then ran two Bayesian mixed-effects regression models with residual reading t
 
 For the first model, we were interested in whether a frequent prime affected the residual reading times. As such, we filtered the dataframe to include trials that contained either an unrelated or frequent prime. We then treatment coded our variables such that for the prime sentences, 0 indicated an unrelated prime and 1 indicated a frequent prime. For target sentences, 0 indicated an infrequent target while 1 indicated a frequent target. We then ran a model with residual reading time as the dependent variable, fixed-effects for prime, target, and their interaction, as well as maximal random-effects [following @barrRandomEffectsStructure2013].
 
-Our second model was similar, however we were interested in how the infrequent prime affected residual reading times. As such, we filtered our dataframe to include trials that contained either the unrelated or infrequent prime. We then treatement coded our variables such that 0 indicated an unrelated prime and 1 indicated an infrequent prime.
+Our second model was similar, however we were interested in how the infrequent prime affected residual reading times. As such, we filtered our dataframe to include trials that contained either the unrelated or infrequent prime. We then treatment coded our variables such that 0 indicated an unrelated prime and 1 indicated an infrequent prime.
 
 Our model syntax was the same for both models, as mentioned previously the difference was the levels of the variables included in the data.
 
 $$
-\text{Residual Reading Time} ~ 0 + \text{Intercept} + \text{prime freq} * \text{target freq} \\ +             (\text{prime freq} * \text{target freq} | \text{Item}) + (\text{prime freq} * \text{target freq} | \text{participant})
+\begin{aligned}
+\text{Residual Reading Time} & \sim \text{Intercept} + \text{prime freq} * \text{target freq} \\ 
+&+ (\text{prime freq} * \text{target freq} | \text{Item}) + (\text{prime freq} * \text{target freq} | \text{participant})
+\end{aligned}
 $$ {#eq-models}
 
 # Results
 
 We first examined whether a frequent prime facilitated the reading of the frequent ordering of the binomial more than the reading time of the infrequent ordering. Following @houghtonTaskdependentConsequencesDisfluency2024, in addition to reporting the estimates we also report the percentage of posterior samples greater than zero. Bayesian statistics don't force us into a binary interpretation of significance or non-significance, by reporting the percentage of posterior samples greater than zero we are able to interpret the results in a more nuanced manner.
+
+The results are presented in @tbl-frequentresults and visualized in @fig-fullresults. Since prime and target types were treatment coded, the Intercept represents the estimated reading times for unrelated prime sentences with an infrequent target sentence. Coefficient estimates represent the distance from the Intercept. Although the credible interval crosses zero, over 93% of the posterior samples for the effect of frequent prime were greater than zero, suggesting that for not-frequent targets, the frequent prime resulted in slower reading times than the unrelated prime. Similarly, over 93% of the posterior samples for frequent target were less than zero, suggesting that for unrelated primes, the frequent target was read faster. Finally, about 90% of the samples for the interaction effect were less than zero, suggesting that the difference between the reading times in the unrelated prime condition and the reading times in the frequent prime condition were larger for infrequent targets than frequent targets. In other words, the frequent prime speeds up the reading times for the frequent ordering of the binomial more than the infrequent ordering of the binomial.
 
 ```{r, echo = F, message = F}
 #| label: tbl-frequentresults
@@ -134,9 +219,13 @@ m_frequent %>%
   kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
   #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
   row_spec(0, bold = TRUE) %>%
-  column_spec(1, bold = T, width = '18em')
+  column_spec(1, bold = T, width = '14em')
 
 ```
+
+Next we examined whether the infrequent prime speeds up the infrequent ordering of the binomial more than the frequent ordering. If readers are engaged in noisy-channel processing when listening to the prime, they may actually activate *bread and butter* when they hear *butter and bread*. This would result in the infrequent prime speeding up the *frequent* ordering of the binomial more than the infrequent ordering.
+
+The results are presented in @tbl-infrequentresults and visualized in @fig-fullresults. Similar to the previous model, since prime and target types were treatment coded, the Intercept represents the estimated reading times for unrelated prime sentences with an infrequent target sentence. Coefficient estimates represent the distance from the Intercept. We find no meaningful main-effect for infrequent primes or frequent targets, but we do find a meaningful interaction effect. While the credible interval crosses zero, over 90% of the posterior samples were greater than zero. The results suggest that the infrequent prime speeds up reading for the infrequent target more than the frequent target.
 
 ```{r, echo = F, message = F}
 #| label: tbl-infrequentresults
@@ -170,15 +259,15 @@ m_infrequent %>%
   kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
   #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
   row_spec(0, bold = TRUE) %>%
-  column_spec(1, bold = T, width = '18em')
+  column_spec(1, bold = T, width = '14em')
 
 ```
 
 ```{r, echo = F, out.width = '80%', fig.align = 'center', warning = F, message = F}
 #| label: fig-fullresults
 #| fig-cap: "Plot of our results. Points indicate"
-#| fig-height: 6
-#| fig-width: 7
+#| fig-height: 5
+#| fig-width: 8
 
 
 p1 = plot(conditional_effects(audio_acc_70_freq), plot = F)[[3]] +
@@ -199,7 +288,13 @@ p1 = plot(conditional_effects(audio_acc_70_freq), plot = F)[[3]] +
   scale_x_discrete(
     labels = c('unrelated' = 'Unrelated', 'frequent' = 'Frequent')
   ) +
-  theme_bw()
+  theme_bw() +
+  theme(
+    axis.title = element_text(size = 16),         # Axis labels
+    axis.text = element_text(size = 14),          # Axis tick labels
+    legend.title = element_text(size = 14),       # Legend title
+    legend.text = element_text(size = 12)         # Legend items
+  )
 
 p2 = plot(conditional_effects(audio_acc_70), plot = F)[[3]] +
   scale_color_manual(
@@ -219,7 +314,13 @@ p2 = plot(conditional_effects(audio_acc_70), plot = F)[[3]] +
   scale_x_discrete(
     labels = c('unrelated' = 'Unrelated', 'not-frequent' = 'Infrequent')
   ) +
-  theme_bw()
+  theme_bw() +
+  theme(
+    axis.title = element_text(size = 16),         # Axis labels
+    axis.text = element_text(size = 14),          # Axis tick labels
+    legend.title = element_text(size = 14),       # Legend title
+    legend.text = element_text(size = 12)         # Legend items
+  )
 
 ggarrange(p1, p2, common.legend = T)
 
@@ -227,6 +328,58 @@ ggarrange(p1, p2, common.legend = T)
 
 # Discussion
 
-# Appendix
+Our results demonstrate that both the frequent and infrequent ordering of a given binomial speeds up the reading times of the respective ordering. That is, priming the frequent ordering speeds up the reading of the frequent ordering, and priming the infrequent ordering speeds up the reading of the infrequent ordering.
+
+\clearpage
+
+# References {.unnumbered}
+
+::: {#refs}
+:::
+
+\newpage
+
+# Appendix {.unnumbered}
+
+\appendix
+
+\renewcommand{\thesection}{\Alph{section}}
+
+\setcounter{section}{0}
+
+\counterwithin{figure}{section}
+
+\counterwithin{table}{section}
+
+# Full List of Stimuli {#sec-full-list-of-stimuli .appendix}
 
 Our full stimuli list is included below.
+
+::: landscape
+```{r, echo = F, message = F}
+#| label: tbl-appendixstimuli
+#| tbl-cap: 'Full set of stimuli.'
+
+stimuli = read_csv('../Data/key.csv') %>%
+  filter(PrimeType != 'filler') %>%
+  select(Binomial, RelFreq,  GenPref, PrimeType, SentenceType, Sentence, Prime) 
+  
+stimuli %>%
+  kable(
+    row.names = FALSE,
+    booktabs = TRUE,
+    format = "latex",
+    escape = TRUE,
+    longtable = TRUE
+  ) %>%
+  kable_styling(
+    latex_options = c("striped", "hold_position"),
+    font_size = 6,
+    full_width = FALSE
+  ) %>%
+  row_spec(0, bold = TRUE)
+
+
+
+```
+:::
