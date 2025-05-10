@@ -2286,47 +2286,8 @@ percent_greater_zero
 ```
 
 
-Maybe filter for participants who show an effect of prime?
 
-## Participants sensitive to frequent primes
-
-```{r}
-part_audio_acc_res = data.frame(ranef(audio_acc_70_freq, pars = 'prime_freqfrequent')$participant)
-
-hist(part_audio_acc_res$Estimate.prime_freqfrequent)
-
-parts_neg_prime = part_audio_acc_res %>%
-  filter(`Estimate.prime_freqfrequent` < 0)
-
-parts_neg_prime = parts_neg_prime %>%
-  mutate(participant = rownames(parts_neg_prime))
-
-parts_neg_prime = parts_neg_prime$participant
-
-```
-
-
-```{r eval = F}
-audio_acc_greater_70_neg_prime = audio_acc_greater_70 %>%
-  filter(participant %in% parts_neg_prime)
-
-audio_acc_70_neg_prime = brm(residual_rts ~ 0 + Intercept + prime_freq * target_freq + 
-            (prime_freq * target_freq | Item) + (prime_freq * target_freq | participant),
-          data = audio_acc_greater_70_neg_prime,
-          iter = 6000, 
-          warmup = 3000,
-          chains = 4,
-          core = 4,
-          thin = 4,
-          prior = c(set_prior("student_t(3, 0, 30)", class = "b"),
-                set_prior("student_t(3, 0, 30)", class = "sd")),
-         control = list(adapt_delta = 0.99),
-         file = 'audio_accuracy_greater_70_neg_prime_exp3' #accuracy_greater_90
-)
-
-fixef(audio_acc_70_neg_prime)
-
-```
+## Plots
 
 
 ```{r}
