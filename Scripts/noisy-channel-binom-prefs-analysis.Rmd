@@ -1835,10 +1835,12 @@ key$Item = factor(key$Item)
 
 data_analysis_freq_primes = data_analysis1 %>%
   left_join(key) %>%
+  filter(AudioAcc > 0.7) %>% #exclude low-accuracy participants
   filter(prime_freq != 'infrequent') 
   
 data_analysis1 = data_analysis1 %>%
   left_join(key) %>%
+  filter(AudioAcc > 0.7) %>% #exclude low-accuracy participants
   filter(prime_freq != 'frequent') 
   
 length(unique(data_analysis1$Item))
@@ -1937,12 +1939,16 @@ percent_greater_zero
 
 audio_acc_greater_70 = data_analysis1 %>% 
   filter(!is.na(List)) %>%
+  #filter(AudioAcc > 0.7) %>% #exclude low-accuracy participants
   filter(target == 1 | spillover == 1) %>%
   filter(rt > 100 & rt < 5000) %>%
-  filter(AudioAcc > 0.7) %>% #exclude low-accuracy participants
   group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct, prime_freq, target_freq, AudioAcc) %>%
   summarize(residual_rts = sum(residual_rts)) %>%
   ungroup()
+
+audio_acc_greater_70 %>%
+  #group_by(participant) %>%
+  summarize(mean(AudioAcc), mean(OverallAcc))
 
 mean_rts = audio_acc_greater_70 %>%
   ungroup() %>%
@@ -1993,6 +1999,44 @@ percent_greater_zero = data.frame(fixef(audio_acc_70, summary = F)) %>%
   summarize((sum(estimate > 0) / length(estimate)) * 100)
 
 percent_greater_zero
+```
+### Mental rotation performance
+
+```{r}
+mental_rotation_data = data %>% 
+  select(participant, Prime, Sentence, angle, right_im, key_resp.corr, audio_loop.thisTrialN, audio_loop.thisIndex, audio_loop.thisN) %>%
+  mutate(Sentence = na_if(Sentence, "")) %>%
+  group_by(participant) %>%
+  fill(Sentence, .direction = 'up')
+
+mental_rotation_data = mental_rotation_data %>%
+  group_by(participant, Sentence) %>%
+  mutate(trial = audio_loop.thisTrialN) %>%
+  fill(trial, .direction = 'up') 
+
+ mental_rotation_data_part_excluded = mental_rotation_data %>%
+   filter(participant %in% audio_acc_greater_70$participant)%>% 
+   group_by(angle) %>% summarize(mean(key_resp.corr, na.rm = T))
+
+mental_rotation_summary = mental_rotation_data %>%
+  group_by(participant, Sentence, trial) %>%
+  summarize(mean_angle = mean(angle, na.rm = T), mean_corr = mean(key_resp.corr, na.rm = T), num_rotations = n())
+```
+
+```{r}
+mental_rotation_summary %>%
+  filter(participant %in% audio_acc_greater_70$participant) %>%
+  group_by(participant) %>%
+  summarize(trial_mean_corr = mean(mean_corr, na.rm = T)) %>%
+  ungroup() %>%
+  summarize(mean(trial_mean_corr, na.rm = T))
+
+mental_rotation_summary$participant = factor(mental_rotation_summary$participant)
+
+
+mental_rotation_summary
+
+
 ```
 
 ## Unrelated vs Frequet Prime
@@ -2134,6 +2178,7 @@ key$Item = factor(key$Item)
   
 data_analysis1_freq = data_analysis1_freq %>%
   left_join(key) %>%
+  filter(AudioAcc > 0.7) %>% #exclude low-accuracy participants
   filter(prime_freq != 'not-frequent') 
   
 length(unique(data_analysis1_freq$Item))
@@ -2226,13 +2271,17 @@ percent_greater_zero
 ```{r}
 
 audio_acc_greater_70_freq = data_analysis1_freq %>% 
+  #filter(AudioAcc > 0.7) %>% #exclude low-accuracy participants
   filter(!is.na(List)) %>%
   filter(target == 1 | spillover == 1) %>%
   filter(rt > 100 & rt < 5000) %>%
-  filter(AudioAcc > 0.7) %>% #exclude low-accuracy participants
   group_by(participant, Item, List, Condition, WordA, WordB, Binomial, PrimeType, Prime, Sentence, SentenceType, Questions, Answer, OverallAcc, correct, prime_freq, target_freq, AudioAcc) %>%
   summarize(residual_rts = sum(residual_rts)) %>%
   ungroup()
+
+audio_acc_greater_70_freq %>%
+  #group_by(participant) %>%
+  summarize(mean(AudioAcc), mean(OverallAcc))
 
 mean_rts = audio_acc_greater_70_freq %>%
   ungroup() %>%
@@ -2285,7 +2334,44 @@ percent_greater_zero = data.frame(fixef(audio_acc_70_freq, summary = F)) %>%
 percent_greater_zero
 ```
 
+### Mental rotation performance
 
+```{r}
+mental_rotation_data = data %>% 
+  select(participant, Prime, Sentence, angle, right_im, key_resp.corr, audio_loop.thisTrialN, audio_loop.thisIndex, audio_loop.thisN) %>%
+  mutate(Sentence = na_if(Sentence, "")) %>%
+  group_by(participant) %>%
+  fill(Sentence, .direction = 'up')
+
+mental_rotation_data = mental_rotation_data %>%
+  group_by(participant, Sentence) %>%
+  mutate(trial = audio_loop.thisTrialN) %>%
+  fill(trial, .direction = 'up') 
+
+ mental_rotation_data_part_excluded_freq = mental_rotation_data %>%
+   filter(participant %in% audio_acc_greater_70_freq$participant)%>% 
+   group_by(angle) %>% summarize(mean(key_resp.corr, na.rm = T))
+
+mental_rotation_summary = mental_rotation_data %>%
+  group_by(participant, Sentence, trial) %>%
+  summarize(mean_angle = mean(angle, na.rm = T), mean_corr = mean(key_resp.corr, na.rm = T), num_rotations = n())
+```
+
+```{r}
+mental_rotation_summary %>%
+  filter(participant %in% audio_acc_greater_70_freq$participant) %>%
+  group_by(participant) %>%
+  summarize(trial_mean_corr = mean(mean_corr, na.rm = T)) %>%
+  ungroup() %>%
+  summarize(mean(trial_mean_corr, na.rm = T))
+
+mental_rotation_summary$participant = factor(mental_rotation_summary$participant)
+
+
+mental_rotation_summary
+
+
+```
 
 ## Plots
 
