@@ -424,7 +424,9 @@ it's hard to account for the context-specificity of phoneme realizations
 without a storage mechanism that contains context-specific phonetic
 detail.
 
-Similarly, in their seminal paper McMurray et al.
+Similarly, there is evidence that phonetic representations may be stored
+holistically (i.e., as exemplars instead of abstract phoneme
+representations). For example, in their seminal paper McMurray et al.
 (\citeproc{ref-mcmurrayGradientSensitivityWithincategory2008}{2008})
 demonstrated that people are sensitive to gradient changes of
 within-category voice onset timing (VOT). VOT is a measure of when the
@@ -449,10 +451,17 @@ the competitor. They found that within-category variability of VOT
 affected the proportion of fixations to the competitor, suggesting
 sensitivity to within-category variability in VOT. It is difficult to
 account for this sensitivity if words are composed via abstract
-representations of sounds (i.e., phonemes). As such, this finding has
-been taken as strong evidence that people are storing exemplars of
-sounds when they experience them as opposed to simply storing abstract
-representations. While this is a phenomenon at the individual
+representations of sounds (i.e., phonemes). While it may be possible to
+account for the results in McMurray et al.
+(\citeproc{ref-mcmurrayGradientSensitivityWithincategory2008}{2008})
+without storing exemplars (e.g., by using the phonetic detail to
+facilitate the judgement of whether a sound is /p/ or /b/ but
+none-the-less still implementing a categorical judgement), the phonetic
+information must be stored somewhere (because participants must have
+some knowledge of the distribution of VOTs for a /p/ or a /b/). As such,
+this finding has been taken as evidence that people are storing
+exemplars of sounds when they experience them as opposed to only storing
+abstract representations. While this is a phenomenon at the individual
 sound-level, the connection to multi-word storage may be clear by now:
 if people are storing individual sounds instead of simply storing
 phoneme-level abstractions, then the same may be true on the multi-word
@@ -473,11 +482,11 @@ suggests that \emph{I don't know} has a representation separate from the
 individual parts.\footnote{One could account for this by positing
   adjacency effects such as co-articulation, which definitely are
   responsible to a certain extent for phonetic reduction. However, this
-  seems unlikely to explain all of the effects seen in Bybee
-  (\citeproc{ref-bybeePhonologyLanguageUse2003}{2003}) since even in the
-  phrase \emph{I don't know, don't} seems to only be reducible in
-  specific contexts. For example, in sentences that contain an
-  additional clause (e.g., in a sentence containing a complementizer
+  seems unlikely to explain all of the effects seen in Bybee \&
+  Scheibman (\citeproc{ref-bybeeEffectUsageDegrees1999}{1999}) since
+  even in the phrase \emph{I don't know, don't} seems to only be
+  reducible in specific contexts. For example, in sentences that contain
+  an additional clause (e.g., in a sentence containing a complementizer
   phrase, such as \emph{I don't know what you're talking about}, \emph{I
   don't know} cannot be reduced as much as it can be when it's produced
   alone (e.g., as a response to a simple question) where it can be
@@ -534,21 +543,21 @@ constraints into a single generative preference value that indicated the
 direction and magnitude of the preference.
 
 Morgan \& Levy (\citeproc{ref-morganAbstractKnowledgeDirect2016}{2016a})
-then examined whether human ordering preferences are driven by these
-abstract preferences for binomials ranging from low to high overall
-frequency (where overall frequency is the total number of times a
-binomial occurs in either ordering, e.g., the number of times
-\emph{bread and butter} occurs plus the number of times \emph{butter and
-bread} occurs). Specifically, they used a self-paced reading task where
-participants read binomials in sentence contexts. They found that for
-low-frequency binomials, human reading times were driven primarily by
-generative preferences, however for high-frequency binomials human
-reading times were driven primarily by relative frequency (i.e., the
-proportion of counts in the alphabetical ordering to the nonalphabetical
-ordering). Their results suggest that humans compose low-frequency
-binomials using abstract knowledge of the language, however for
-high-frequency binomials humans store and access a holistic
-representation of the entire binomial.
+examined whether human ordering preferences are driven by these abstract
+preferences for binomials ranging from low to high overall frequency
+(where overall frequency is the total number of times a binomial occurs
+in either ordering, e.g., the number of times \emph{bread and butter}
+occurs plus the number of times \emph{butter and bread} occurs).
+Specifically, they used a self-paced reading task where participants
+read binomials in sentence contexts. They found that for low-frequency
+binomials, human reading times were driven primarily by generative
+preferences, however for high-frequency binomials human reading times
+were driven primarily by relative frequency (i.e., the proportion of
+counts in the alphabetical ordering to the nonalphabetical ordering).
+Their results suggest that humans compose low-frequency binomials using
+abstract knowledge of the language, however for high-frequency binomials
+humans store and access a holistic representation of the entire
+binomial.
 
 \subsection{Frequency-dependent Preference
 Extremity}\label{frequency-dependent-preference-extremity}
@@ -589,16 +598,17 @@ higher overall frequency (where overall frequency is the sum of counts
 in either adjective ordering; e.g., count of \emph{big blue sky} plus
 \emph{blue big sky}.) show more polarized ordering preferences.
 
-One way to account for frequency-dependent preference extremity is with
-holistic storage. For example, as mentioned earlier there is evidence
-that humans rely on abstract preferences for low-frequency binomials but
-rely on their experience with a binomial for high-frequency binomials.
-This might help to explain why people develop strong preferences for
-high-frequency binomials but not low-frequency binomials. However, while
-holistic storage may be a driving factor for frequency-dependent
-preference extremity, it isn't enough by itself to account for this
-phenomenon. That is, high-frequency binomials being stored holistically
-does not necessarily lead to them being used more.
+One way to account for frequency-dependent preference extremity is to
+posit that high-frequency binomials are stored holistically. For
+example, as mentioned earlier there is evidence that humans rely on
+abstract preferences for low-frequency binomials but rely on their
+experience with a binomial for high-frequency binomials. This might help
+to explain why people develop strong preferences for high-frequency
+binomials but not low-frequency binomials. However, while holistic
+storage may be a driving factor for frequency-dependent preference
+extremity, it isn't enough by itself to account for this phenomenon.
+That is, high-frequency binomials being stored holistically does not
+necessarily lead to them being used more.
 
 In addition to holistic storage, it is possible that frequency-dependent
 preference extremity arises as an interaction between imperfect learning
@@ -623,7 +633,7 @@ frequency-dependent preference extremity. They demonstrated that this is
 because in their model, learners rely on their prior knowledge (abstract
 preferences in this case) when there isn't enough data (such as in the
 case of lower frequency binomials), but when they have enough data they
-overcome their prior knowledge resulting in more regularized/polarized
+overcome their prior knowledge and produce more regularized/polarized
 productions.
 
 Specifically Morgan \& Levy
@@ -645,11 +655,11 @@ modeled as rational Bayesian learners using Bayes' rule. For example, in
 a classical 2-alternative iterated learning paradigm, the learner
 estimates the probability of the binomial being ordered alphabetically
 (alphabetical ordering is used as a relatively neutral reference order).
-Specifically, the learner estimates this by multiplying the probability
-of observing the alphabetical ordering of a given binomial under a given
-hypothesis about the ordering preferences (the likelihood,
-\(P(x_1|\theta_1)\)) by the prior probability of that hypothesis (prior,
-\(P(\theta_1)\)).
+The learner estimates this by multiplying the probability of observing
+the alphabetical ordering of a given binomial under a given hypothesis
+about the ordering preferences (the likelihood, \(P(x_1|\theta_1)\),
+Equation~\ref{eq-likelihoodbernoulli}) by the prior probability of that
+hypothesis (\(P(\theta_1)\), Equation~\ref{eq-priorbeta}).
 
 In other words, the likelihood is equivalent to the probability of a
 sequence of binomials containing \(x_1\) binomials in alphabetical
@@ -687,21 +697,24 @@ all binomials (and as such is frequency independent). However, they
 demonstrated that by adding a regularization parameter, the model
 predicts frequency-dependent preference extremity. This parameter
 pressures productions to be more regular (regardless of the frequency of
-the binomial). Thus, if there is not strong evidence for a preference
-for one ordering over the other, the learner's preferences are pulled
-towards the prior. If there is enough evidence, however, they learn a
-preference and this preference becomes more polarized over time. As
-such, this model was able to predict frequency-dependent preference
-extremity arising across generations of learners.
+the binomial). For low-frequency binomials, the strength of the
+regularization is not strong enough to overcome the prior, and thus
+learners don't develop strong preferences for low-frequency binomials.
+On the other hand, high-frequency binomials occur enough that the
+regularization bias can overcome the prior and thus learners learn more
+polarized preferences (sometimes even in the opposite direction from the
+abstract preferences). In other words, this model was able to predict
+frequency-dependent preference extremity arising across generations of
+learners.
 
 A visualization of their results is shown in
 Figure~\ref{fig-morganfreqresults}. The results demonstrate that as R
-increases (i.e., as the regularization parameter increases), more
-binomials become polarized (as demonstrated by greater probability
-density around values of 0 and 1). While their results demonstrate that
-a frequency-independent regularization bias can account for
-frequency-dependent preference extremity, it's unclear what process this
-bias is analogous to in language learning/processing.
+increases (i.e., as the regularization parameter increases), the
+strength of the regularization effect increases (as demonstrated by
+greater probability density around values of 0 and 1). While their
+results demonstrate that a frequency-independent regularization bias can
+account for frequency-dependent preference extremity, it's unclear what
+process this bias is analogous to in language learning/processing.
 
 \begin{figure}[htbp]
 
@@ -815,7 +828,7 @@ predicts that increasing the probability of an implausible utterance
 should lead to an increased rate of implausible interpretations because
 by increasing the probability of an implausible utterance, the
 probability that the speaker intended to say an implausible utterance
-also increases (i.e., an increasing in the value of
+also increases (i.e., an increase in the value of
 \(P(s_i=\text{implausible})\)).
 
 Gibson et al.
@@ -846,7 +859,7 @@ with an iterated learning model can account for frequency-dependent
 preference extremity. Specifically, we used a 2-alternative iterated
 learning paradigm. In this paradigm, learners are modeled as having
 heard N tokens of a given binomial in either alphabetical or
-nonalphabetical order while updating their hypothesis about the inferred
+nonalphabetical order while updating their hypothesis about the
 probability of each ordering of the binomial. In our model, the
 learner's goal was to learn the ordering preferences for each binomial.
 After learning the ordering preferences for each binomial, the learner
@@ -878,10 +891,11 @@ they had heard \emph{A and B} (or more accurately, in proportion to the
 learner's belief about the probability that the speaker intended \emph{A
 and B}). For high-frequency binomials, the learner encounters the
 binomial more and has more opportunities to update their ordering
-preferences, which may result in that binomial developing polarized
-preferences. However, for low-frequency binomials, the learner does not
-encounter the binomial as many times and has fewer opportunities to
-update their beliefs, resulting in less polarized preferences.
+preferences, which may result in the learner developing more polarized
+preferences for that binomial. However, for low-frequency binomials, the
+learner does not encounter the binomial as many times and has fewer
+opportunities to update their beliefs, which may result in less
+polarized preferences.
 
 In Houghton \& Morgan
 (\citeproc{ref-houghton2024frequencydependentpreferenceextremity}{2024}),
@@ -1339,7 +1353,7 @@ prevent the listener from interpreting the binomial as the more frequent
 ordering, explaining why there is no priming of \emph{bread and butter}.
 Indeed, there is evidence in the literature that prediction error (i.e.,
 violation of expectations/prediction) leads to both enhanced memory and
-better learning due to increased attention on the surprising item
+better learning due to increased attention to the surprising item
 (\citeproc{ref-haeuser2023effects}{Haeuser \& Kray, 2023};
 \citeproc{ref-hollingworth2000semantic}{Hollingworth \& Henderson,
 2000}; \citeproc{ref-hubbard2024impact}{Hubbard \& Federmeier, 2024};
@@ -1353,16 +1367,16 @@ they also showed enhanced memory effects (i.e., better performance in
 the word recognition task). In other words, when participants'
 expectations were violated, they were able to remember the word better.
 Further, there is also evidence that surprising objects in a scene
-attracts attention and tends to be remembered better
+attract attention and tend to be remembered better
 (\citeproc{ref-hollingworth2000semantic}{Hollingworth \& Henderson,
 2000}). For example, Hollingworth \& Henderson
 (\citeproc{ref-hollingworth2000semantic}{2000}) found that participants
 were able to more quickly identify whether an object was in a previous
 scene if that object was semantically inconsistent (i.e., surprising)
 with the other objects in the scene. These results in conjunction with
-the present study suggest that perhaps the surprising nature of the
-infrequent ordering of the binomials draws enough attention to them to
-negate any noisy-channel processing effects.
+the present study suggest that it is possible that the surprising nature
+of the infrequent ordering of the binomials draws enough attention to
+them to negate any noisy-channel processing effects.
 
 It's also possible that the size of the units matter. Much of the
 literature on noisy-channel processing involves short prepositions being
